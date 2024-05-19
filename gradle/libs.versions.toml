@@ -1,0 +1,5 @@
+[versions]
+http-client = "1.15.0"
+
+[libraries]
+http-client = { module = "eu.codlab:kotlin-http-client", version.ref = "http-client" }

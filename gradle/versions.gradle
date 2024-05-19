@@ -1,0 +1,24 @@
+/* * * * * * * * * * * * * * * * *
+ * Default project info
+ * * * * * * * * * * * * * * * * */
+def defaultVersion = "0.0.1"
+def defaultGroup = "eu.codlab"
+
+ext {
+    prop = { name, defValue ->
+        return rootProject.properties.containsKey(name)
+                ? rootProject.properties[name] : defValue
+    }
+
+    sonarUrl = prop("sonarUrl", null)
+    sonarToken = prop("sonarToken", null)
+
+    signingKeyId = prop("signing.keyId", null)
+
+    group = prop("GROUP_ID", defaultGroup)
+    version = [defaultVersion, prop("SUFFIX", null)].findAll().join("-")
+    originalVersion = defaultVersion
+
+    projectVersionCode = 1
+    publishWithSources = true
+}
