@@ -43,6 +43,8 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(additionals.kotlinx.coroutines.core)
+                implementation(additionals.kotlinx.coroutines.test)
             }
         }
     }

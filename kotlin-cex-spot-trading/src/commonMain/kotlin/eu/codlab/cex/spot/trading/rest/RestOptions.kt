@@ -1,4 +1,4 @@
-package eu.codlab.cex.spot.trading
+package eu.codlab.cex.spot.trading.rest
 
 import kotlinx.serialization.Serializable
 
