@@ -1,20 +1,10 @@
-import org.gradle.plugins.ide.idea.model.IdeaModel
-
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.android.library)
-    alias(additionals.plugins.jetbrains.compose)
     alias(additionals.plugins.kotlin.serialization)
     id("publication")
     id("jvmCompat")
     id("idea")
-    idea
-}
-
-idea {
-    module {
-        sourceDirs.add(File("./src/commonMain/kotlin"))
-    }
 }
 
 kotlin {
@@ -46,10 +36,15 @@ kotlin {
             }
             dependencies {
                 implementation(libs.http.client)
+                implementation(libs.crypto)
                 implementation(additionals.kotlinx.serialization.json)
             }
         }
-        val commonTest by getting
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
     }
 }
 
