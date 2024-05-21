@@ -17,7 +17,13 @@ class TestPrivateApi {
     }
 
     @Test
-    fun testActiveOrders() = runTest {
-        println(api.activeOrdersStatus())
+    fun testOpenOrders() = runTest {
+        println(api.openOrders("ETH" to "EUR"))
     }
+
+    /*@Test
+    fun testActiveOrders() = runTest {
+        val orders = api.openOrders()
+        println(api.activeOrdersStatus(orders.first().id))
+    }*/
 }
