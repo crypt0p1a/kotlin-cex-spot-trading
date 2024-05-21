@@ -3,6 +3,8 @@ package eu.codlab.cex.spot.trading
 import eu.codlab.cex.spot.trading.calls.RestApiSecret
 import eu.codlab.cex.spot.trading.models.AccountBalance
 import eu.codlab.cex.spot.trading.models.OpenOrder
+import eu.codlab.cex.spot.trading.models.OrderType
+import eu.codlab.cex.spot.trading.models.PlaceOrder
 import eu.codlab.cex.spot.trading.models.TransactionId
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
@@ -63,4 +65,20 @@ class PrivateApi(
                 Long.serializer()
             )
         ) ?: emptyList()
+
+    suspend fun placeOrder(
+        symbols: Pair<String, String>,
+        type: OrderType,
+        amount: Double,
+        price: Double
+    ) = call.call(
+        "place_order/${symbols.first}/${symbols.second}",
+        PlaceOrder(
+            type = type,
+            amount = amount,
+            price = price
+        ),
+        PlaceOrder.serializer(),
+        Boolean.serializer()
+    )
 }
