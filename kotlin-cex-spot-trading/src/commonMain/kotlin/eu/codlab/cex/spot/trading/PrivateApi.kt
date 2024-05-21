@@ -5,6 +5,7 @@ import eu.codlab.cex.spot.trading.models.AccountBalance
 import eu.codlab.cex.spot.trading.models.OpenOrder
 import eu.codlab.cex.spot.trading.models.OrderDetail
 import eu.codlab.cex.spot.trading.models.OrderId
+import eu.codlab.cex.spot.trading.models.OrderTransaction
 import eu.codlab.cex.spot.trading.models.OrderType
 import eu.codlab.cex.spot.trading.models.PlaceOrder
 import eu.codlab.cex.spot.trading.models.TransactionId
@@ -84,11 +85,17 @@ class PrivateApi(
         Boolean.serializer()
     )
 
-    suspend fun getOrderDetails(orderId: Long) =
-        call.call(
-            "get_order/",
-            OrderId(orderId),
-            OrderId.serializer(),
-            OrderDetail.serializer()
-        )
+    suspend fun getOrderDetails(orderId: Long) = call.call(
+        "get_order/",
+        OrderId(orderId),
+        OrderId.serializer(),
+        OrderDetail.serializer()
+    )
+
+    suspend fun getOrderTx(orderId: Long) = call.call(
+        "get_order_tx/",
+        OrderId(orderId),
+        OrderId.serializer(),
+        OrderTransaction.serializer()
+    )
 }

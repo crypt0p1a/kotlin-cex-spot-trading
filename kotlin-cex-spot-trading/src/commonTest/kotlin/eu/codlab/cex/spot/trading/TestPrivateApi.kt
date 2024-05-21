@@ -46,4 +46,12 @@ class TestPrivateApi {
         println("cancelling $order")
         println(api.getOrderDetails(order.id))
     }
+
+    @Test
+    fun testGetOrderTx() = runTest {
+        val order = api.openOrders().first()
+        // assuming that a transaction exists
+        println("cancelling $order")
+        println(api.getOrderTx(order.id))
+    }
 }
