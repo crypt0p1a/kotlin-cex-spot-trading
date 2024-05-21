@@ -3,6 +3,8 @@ package eu.codlab.cex.spot.trading
 import eu.codlab.cex.spot.trading.calls.RestApiSecret
 import eu.codlab.cex.spot.trading.models.AccountBalance
 import eu.codlab.cex.spot.trading.models.OpenOrder
+import eu.codlab.cex.spot.trading.models.OrderDetail
+import eu.codlab.cex.spot.trading.models.OrderId
 import eu.codlab.cex.spot.trading.models.OrderType
 import eu.codlab.cex.spot.trading.models.PlaceOrder
 import eu.codlab.cex.spot.trading.models.TransactionId
@@ -81,4 +83,12 @@ class PrivateApi(
         PlaceOrder.serializer(),
         Boolean.serializer()
     )
+
+    suspend fun getOrderDetails(orderId: Long) =
+        call.call(
+            "get_order/",
+            OrderId(orderId),
+            OrderId.serializer(),
+            OrderDetail.serializer()
+        )
 }
