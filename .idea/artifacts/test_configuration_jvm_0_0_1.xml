@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="test-configuration-jvm-0.0.1">
+    <output-path>$PROJECT_DIR$/test-configuration/build/libs</output-path>
+    <root id="archive" name="test-configuration-jvm-0.0.1.jar">
+      <element id="module-output" name="kotlin-cex-spot-trading.test-configuration.jvmMain" />
+    </root>
+  </artifact>
+</component>

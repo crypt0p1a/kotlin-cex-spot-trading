@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/gradle/extended/v1.11.0/kt-plugins" />
             <option value="$PROJECT_DIR$/kotlin-cex-spot-trading" />
+            <option value="$PROJECT_DIR$/test-configuration" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

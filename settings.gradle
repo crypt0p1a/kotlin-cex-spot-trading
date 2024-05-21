@@ -30,3 +30,4 @@ dependencyResolutionManagement {
 includeBuild "gradle/extended/${ext.GRADLE_EXTENDED_VERSION_USED}/kt-plugins"
 
 include("kotlin-cex-spot-trading")
+include("test-configuration")

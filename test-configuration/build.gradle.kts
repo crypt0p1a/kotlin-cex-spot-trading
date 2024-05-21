@@ -1,8 +1,10 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.android.library)
     alias(additionals.plugins.kotlin.serialization)
-    id("publication")
+    alias(additionals.plugins.multiplatform.buildkonfig)
     id("jvmCompat")
 }
 
@@ -44,8 +46,27 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation(additionals.kotlinx.coroutines.core)
                 implementation(additionals.kotlinx.coroutines.test)
-                implementation(project(":test-configuration"))
             }
+        }
+    }
+}
+
+buildkonfig {
+    packageName = "eu.codlab.configuration"
+
+    defaultConfigs {
+        listOf(
+            "apiKey",
+            "apiSecret",
+            "clientId",
+        ).forEach {
+            buildConfigField(
+                FieldSpec.Type.STRING,
+                it,
+                rootProject.extra[it] as String,
+                nullable = false,
+                const = true
+            )
         }
     }
 }

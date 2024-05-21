@@ -19,6 +19,10 @@ ext {
     version = [defaultVersion, prop("SUFFIX", null)].findAll().join("-")
     originalVersion = defaultVersion
 
+    apiSecret = prop("cexApiSecret", null)
+    apiKey = prop("cexApiKey", null)
+    clientId = prop("cexClientId", null)
+
     projectVersionCode = 1
     publishWithSources = true
 }
