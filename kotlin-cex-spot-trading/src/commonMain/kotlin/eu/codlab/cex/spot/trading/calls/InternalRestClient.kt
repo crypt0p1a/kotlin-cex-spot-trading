@@ -20,6 +20,7 @@ abstract class InternalRestClient(options: RestOptions = RestOptions()) {
     protected val json = Json {
         encodeDefaults = true
         ignoreUnknownKeys = true
+        isLenient = true
     }
 
     protected val options: RestOptions = options.copy()

@@ -10,7 +10,9 @@ data class OpenOrder(
     val type: OrderType,
     val price: Double,
     val amount: Double,
-    val pending: Double
+    val pending: Double,
+    val symbol1: String,
+    val symbol2: String
 )
 
 @Serializable

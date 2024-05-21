@@ -3,7 +3,7 @@ package eu.codlab.cex.spot.trading
 import eu.codlab.cex.spot.trading.calls.RestApiSecret
 import eu.codlab.cex.spot.trading.models.AccountBalance
 import eu.codlab.cex.spot.trading.models.OpenOrder
-import eu.codlab.cex.spot.trading.models.OrdersList
+import eu.codlab.cex.spot.trading.models.TransactionId
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 
@@ -47,4 +47,20 @@ class PrivateApi(
             String.serializer()
         )
      */
+
+    suspend fun cancelOrder(transactionId: Long) =
+        call.call(
+            "cancel_order/",
+            TransactionId(transactionId),
+            TransactionId.serializer(),
+            Boolean.serializer()
+        )
+
+    suspend fun cancelPairOrders(symbols: Pair<String, String>): List<Long> =
+        call.call(
+            "cancel_orders/${symbols.first}/${symbols.second}",
+            ListSerializer(
+                Long.serializer()
+            )
+        ) ?: emptyList()
 }

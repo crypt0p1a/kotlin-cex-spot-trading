@@ -21,9 +21,21 @@ class TestPrivateApi {
         println(api.openOrders("ETH" to "EUR"))
     }
 
-    /*@Test
-    fun testActiveOrders() = runTest {
-        val orders = api.openOrders()
-        println(api.activeOrdersStatus(orders.first().id))
-    }*/
+    @Test
+    fun testCancelOrder() = runTest {
+        val transactionId = api.openOrders().firstOrNull()?.id
+            ?: return@runTest
+        // assuming that a transaction exists
+        println("cancelling $transactionId")
+        println(api.cancelOrder(transactionId))
+    }
+
+    @Test
+    fun testCancelOrders() = runTest {
+        val transaction = api.openOrders().firstOrNull()
+            ?: return@runTest
+        // assuming that a transaction exists
+        println("cancelling $transaction")
+        println(api.cancelPairOrders(transaction.symbol1 to transaction.symbol2))
+    }
 }
