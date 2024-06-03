@@ -25,15 +25,22 @@ private object PercentageFloatSerializer : KSerializer<Float> {
 
 @Serializable
 data class Ticker(
-    val timestamp: Long,
+    val bestBid: Double,
+    val bestAsk: Double,
+    val bestBidChange: Double,
+    val bestBidChangePercentage: PercentageFloat,
+    val bestAskChange: Double,
+    val bestAskChangePercentage: PercentageFloat,
+    val volume30d: Double,
     val low: Double,
     val high: Double,
-    val last: Double,
     val volume: Double,
-    val volume30d: Double,
-    val bid: Double = 0.0,
-    val ask: Double = 0.0,
+    val quoteVolume: Double,
+    val lastTradeVolume: Double,
+    val last: Double,
+    val lastTradePrice: Double,
     val priceChange: Double,
-    private val priceChangePercentage: PercentageFloat,
-    val pair: String
+    val priceChangePercentage: Double,
+    val lastTradeDateISO: String,
+    val volumeUSD: Double
 )

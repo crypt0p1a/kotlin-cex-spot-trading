@@ -37,7 +37,7 @@ class RestApiSecret(
         val message = nonce.toString() + clientId + apiKey
         val signature = signature(message)
 
-        val response = client.post("$url$action") {
+        val response = client.post("$url/rest/$action") {
             contentType(ContentType.Application.FormUrlEncoded)
 
             val addons = mapOf(

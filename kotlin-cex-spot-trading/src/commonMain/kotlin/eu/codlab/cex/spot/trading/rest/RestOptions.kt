@@ -7,6 +7,6 @@ data class RestOptions(
     val apiLimit: Int = 300,
     val timeout: Long = 30000,
     val rejectUnauthorized: Boolean = true,
-    val host: String = "https://cex.io/api/",
+    val host: String = "https://trade.cex.io/api/spot/",
     val log: (tag: String, text: String) -> Unit = { _, _ -> }
 )

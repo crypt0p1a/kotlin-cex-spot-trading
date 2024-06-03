@@ -4,9 +4,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TradeHistory(
-    val type: String,
-    val date: Long,
-    val amount: Double,
+    val pageSize: Int,
+    val trades: List<TradeFromHistory>
+)
+
+@Serializable
+data class TradeFromHistory(
+    val side: OrderTypeHistory,
+    val dateISO: String,
     val price: Double,
-    val tid: Long
+    val amount: Double,
+    val tradeId: String
 )

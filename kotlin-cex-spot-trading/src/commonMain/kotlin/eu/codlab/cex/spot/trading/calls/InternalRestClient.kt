@@ -13,14 +13,17 @@ import eu.codlab.cex.spot.trading.utils.ClientProvider
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 
 abstract class InternalRestClient(options: RestOptions = RestOptions()) {
+    @OptIn(ExperimentalSerializationApi::class)
     protected val json = Json {
         encodeDefaults = true
         ignoreUnknownKeys = true
         isLenient = true
+        explicitNulls = false
     }
 
     protected val options: RestOptions = options.copy()

@@ -50,22 +50,21 @@ private object PriceAmountSerializer : KSerializer<List<PriceAmount>> {
 @Serializable
 data class OrderBook(
     val timestamp: Long,
-    @SerialName("timestamp_ms")
-    val timestampMs: Long,
+    val currency1: String,
+    val currency2: String,
     @Serializable(with = PriceAmountSerializer::class)
     val bids: List<PriceAmount>,
     @Serializable(with = PriceAmountSerializer::class)
-    val asks: List<PriceAmount>,
-    val pair: String,
-    val id: Long,
-    @SerialName("sell_total")
-    val sellTotal: Double,
-    @SerialName("buy_total")
-    val buyTotal: Double,
+    val asks: List<PriceAmount>
 )
 
 @Serializable
 data class PriceAmount(
     val price: Double,
     val amount: Double
+)
+
+@Serializable
+data class OrderBookRequest(
+    val pair: String
 )
