@@ -7,7 +7,9 @@ import eu.codlab.cex.spot.trading.models.OrderDetail
 import eu.codlab.cex.spot.trading.models.OrderId
 import eu.codlab.cex.spot.trading.models.OrderTransaction
 import eu.codlab.cex.spot.trading.models.OrderType
+import eu.codlab.cex.spot.trading.models.Pairs
 import eu.codlab.cex.spot.trading.models.PlaceOrder
+import eu.codlab.cex.spot.trading.models.TradingFees
 import eu.codlab.cex.spot.trading.models.TransactionId
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
@@ -21,6 +23,13 @@ class PrivateApi(
         clientId,
         apiKey,
         apiSecret
+    )
+
+    suspend fun getMyCurrentFee(pairs: Pairs) = call.call(
+        "get_my_current_fee",
+        pairs,
+        Pairs.serializer(),
+        TradingFees.serializer()
     )
 
     suspend fun accountBalance() = call.call("balance/", AccountBalance.serializer())

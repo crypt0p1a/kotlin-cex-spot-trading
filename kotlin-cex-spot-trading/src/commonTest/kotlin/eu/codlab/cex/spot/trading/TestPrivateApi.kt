@@ -1,5 +1,6 @@
 package eu.codlab.cex.spot.trading
 
+import eu.codlab.cex.spot.trading.models.Pairs
 import eu.codlab.configuration.Configuration
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -10,6 +11,11 @@ class TestPrivateApi {
         Configuration.apiKey,
         Configuration.apiSecret
     )
+
+    @Test
+    fun testGetMyCurrentFee() = runTest {
+        println(api.getMyCurrentFee(Pairs(listOf())))
+    }
 
     @Test
     fun testBalance() = runTest {

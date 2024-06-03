@@ -1,11 +1,10 @@
 package eu.codlab.cex.spot.trading.calls
 
 import eu.codlab.cex.spot.trading.rest.RestOptions
-import io.ktor.client.request.forms.FormDataContent
+import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import io.ktor.util.date.getTimeMillis
 import io.ktor.utils.io.core.toByteArray
@@ -13,6 +12,9 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.jsonObject
 import org.kotlincrypto.macs.hmac.sha2.HmacSHA256
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.math.round
 
 class RestApiSecret(
     private val clientId: String,
@@ -32,44 +34,38 @@ class RestApiSecret(
         serializer: KSerializer<I>,
         deserializer: KSerializer<O>
     ): O? {
+        val json = if (null != params) {
+            json.encodeToJsonElement(serializer, params).jsonObject
+        } else {
+            json.parseToJsonElement("{}")
+        }
+
         val url = options.host
-        val nonce = getTimeMillis()
-        val message = nonce.toString() + clientId + apiKey
+        val nonce = round(getTimeMillis() * 1.0 / 1000).toLong()
+        val message = action + nonce + json.toString()
         val signature = signature(message)
 
         val response = client.post("$url/rest/$action") {
-            contentType(ContentType.Application.FormUrlEncoded)
+            contentType(ContentType.Application.Json)
 
-            val addons = mapOf(
-                "key" to apiKey,
-                "signature" to signature,
-                "nonce" to nonce
-            ) + if (null != params) {
-                json.encodeToJsonElement(serializer, params).jsonObject.toMap()
-            } else {
-                emptyMap()
+            headers {
+                set("X-AGGR-KEY", apiKey)
+                set("X-AGGR-TIMESTAMP", "$nonce")
+                set("X-AGGR-SIGNATURE", signature)
             }
 
-            setBody(
-                FormDataContent(
-                    Parameters.build {
-                        addons.entries.forEach { (key, value) ->
-                            append(key, value.toString())
-                        }
-                    }
-                )
-            )
+            setBody(json.toString())
         }
 
         return map(response, deserializer)
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
+    @OptIn(ExperimentalEncodingApi::class)
     private fun signature(message: String): String {
         val hmac = HmacSHA256(apiSecret.toByteArray())
         hmac.update(message.toByteArray())
 
         val result = hmac.doFinal()
-        return result.toHexString()
+        return Base64.encode(result)
     }
 }
