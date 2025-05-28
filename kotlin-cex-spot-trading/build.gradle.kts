@@ -36,6 +36,7 @@ kotlin {
             dependencies {
                 implementation(libs.http.client)
                 implementation(libs.crypto)
+                implementation(libs.korio.klock)
                 implementation(additionals.kotlinx.serialization.json)
             }
         }

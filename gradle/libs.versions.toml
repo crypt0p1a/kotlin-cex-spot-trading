@@ -6,7 +6,4 @@ korio = "4.0.10"
 [libraries]
 http-client = { module = "eu.codlab:kotlin-http-client", version.ref = "http-client" }
 crypto = { module = "org.kotlincrypto.macs:hmac-sha2", version.ref = "crypto" }
-korio = { module = "com.soywiz.korlibs.korio:korio", version.ref = "korio" }
-korio-jvm = { module = "com.soywiz.korlibs.korio:korio-jvm", version.ref = "korio" }
-korio-android = { module = "com.soywiz.korlibs.korio:korio-android", version.ref = "korio" }
-korio-js = { module = "com.soywiz.korlibs.korio:korio-js", version.ref = "korio" }
+korio-klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "korio" }

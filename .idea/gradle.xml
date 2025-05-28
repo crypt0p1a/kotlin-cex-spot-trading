@@ -7,25 +7,25 @@
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
-              <build path="$PROJECT_DIR$/gradle/extended/v1.11.0/kt-plugins" name="kt-plugins">
+              <build path="$PROJECT_DIR$/gradle/extended/7cb11303aebc823a06af706c645e3b787cfa94bd/kt-plugins" name="kt-plugins">
                 <projects>
-                  <project path="$PROJECT_DIR$/gradle/extended/v1.11.0/kt-plugins" />
+                  <project path="$PROJECT_DIR$/gradle/extended/7cb11303aebc823a06af706c645e3b787cfa94bd/kt-plugins" />
                 </projects>
               </build>
             </builds>
           </compositeBuild>
         </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/gradle/extended/v1.11.0/kt-plugins" />
+            <option value="$PROJECT_DIR$/gradle/extended/7cb11303aebc823a06af706c645e3b787cfa94bd/kt-plugins" />
             <option value="$PROJECT_DIR$/kotlin-cex-spot-trading" />
             <option value="$PROJECT_DIR$/test-configuration" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

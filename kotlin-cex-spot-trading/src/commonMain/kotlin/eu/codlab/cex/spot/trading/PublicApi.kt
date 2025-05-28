@@ -1,14 +1,8 @@
 package eu.codlab.cex.spot.trading
 
 import eu.codlab.cex.spot.trading.calls.RestApiPublic
-import eu.codlab.cex.spot.trading.models.Candle
-import eu.codlab.cex.spot.trading.models.CandlePairs
-import eu.codlab.cex.spot.trading.models.CandlePairsInternal
-import eu.codlab.cex.spot.trading.models.CandleSinglePair
 import eu.codlab.cex.spot.trading.models.Currencies
 import eu.codlab.cex.spot.trading.models.CurrencyInfo
-import eu.codlab.cex.spot.trading.models.LastPrice
-import eu.codlab.cex.spot.trading.models.LastPriceCorrect
 import eu.codlab.cex.spot.trading.models.OrderBook
 import eu.codlab.cex.spot.trading.models.OrderBookRequest
 import eu.codlab.cex.spot.trading.models.PairInfo
@@ -16,10 +10,10 @@ import eu.codlab.cex.spot.trading.models.Pairs
 import eu.codlab.cex.spot.trading.models.ProcessingInfo
 import eu.codlab.cex.spot.trading.models.ServerTime
 import eu.codlab.cex.spot.trading.models.Ticker
-import eu.codlab.cex.spot.trading.models.TradeHistory
-import eu.codlab.cex.spot.trading.models.TradeHistoryRequest
-import eu.codlab.cex.spot.trading.models.TradeHistoryRequestWithDate
-import eu.codlab.cex.spot.trading.models.TradeHistoryRequestWithTrade
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistory
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequest
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -40,29 +34,6 @@ class PublicApi {
             OrderBookRequest("$currency1-$currency2"),
             OrderBookRequest.serializer(),
             OrderBook.serializer()
-        )
-
-    suspend fun candles(request: CandlePairs) =
-        call.call(
-            "/get_candles",
-            request.to(),
-            CandlePairsInternal.serializer(),
-            MapSerializer(
-                String.serializer(),
-                ListSerializer(
-                    Candle.serializer()
-                )
-            )
-        )
-
-    suspend fun candles(request: CandleSinglePair) =
-        call.call(
-            "/get_candles",
-            request,
-            CandleSinglePair.serializer(),
-            ListSerializer(
-                Candle.serializer()
-            )
         )
 
     suspend fun tickers(vararg pair: String) = tickers(pair.asList())

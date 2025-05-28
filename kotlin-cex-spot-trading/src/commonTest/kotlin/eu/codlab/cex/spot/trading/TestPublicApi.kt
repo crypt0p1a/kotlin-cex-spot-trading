@@ -1,10 +1,6 @@
 package eu.codlab.cex.spot.trading
 
-import eu.codlab.cex.spot.trading.models.CandlePairs
-import eu.codlab.cex.spot.trading.models.CandleSinglePair
-import eu.codlab.cex.spot.trading.models.OrderType
-import eu.codlab.cex.spot.trading.models.Pairs
-import eu.codlab.cex.spot.trading.models.TradeHistoryRequestWithTrade
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -40,7 +36,7 @@ class TestPublicApi {
 
     @Test
     fun candles() = runTest {
-        println(
+        /*println(
             api.candles(
                 CandleSinglePair(
                     "ETH-EUR",
@@ -57,7 +53,7 @@ class TestPublicApi {
                     fromISOMs = 1676041279412
                 )
             )
-        )
+        )*/
     }
 
     @Test

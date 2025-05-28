@@ -1,6 +1,8 @@
 **/*.exec
 **/*.ec
 
+.idea
+.kotlin
 ./*.iml
 .gradle
 /local.properties

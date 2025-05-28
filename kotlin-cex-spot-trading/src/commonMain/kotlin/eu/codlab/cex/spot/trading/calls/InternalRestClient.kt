@@ -16,6 +16,7 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 
 abstract class InternalRestClient(options: RestOptions = RestOptions()) {
     @OptIn(ExperimentalSerializationApi::class)
@@ -49,10 +50,13 @@ abstract class InternalRestClient(options: RestOptions = RestOptions()) {
             is JsonElementObject -> {
                 val obj = mapped.value
 
+
                 if (obj.containsKey("ok") && obj.jsonString("ok") == "ok") {
                     val data = obj["data"] ?: throw RestClientPairException(response.status, obj)
 
                     json.decodeFromJsonElement(deserializer, data)
+                } else if (obj.containsKey("error")) {
+                    throw RestClientPairException(response.status, obj["error"]!!.jsonObject)
                 } else {
                     json.decodeFromJsonElement(deserializer, mapped.value)
                 }
