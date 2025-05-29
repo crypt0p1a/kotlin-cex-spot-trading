@@ -19,7 +19,6 @@ import kotlin.test.Test
 
 class TestPrivateApi {
     val api = PrivateApi(
-        Configuration.clientId,
         Configuration.apiKey,
         Configuration.apiSecret
     )

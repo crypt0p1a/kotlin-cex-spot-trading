@@ -11,5 +11,11 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Pairs(
+    /**
+     * Currency pair, for which Client wants to receive his fee. Pair should contain two currencies
+     * in upper case divided by "-" symbol. Pair should be listed in traditional direction. For
+     * example, "BTC-USD", but not "USD-BTC". If this field is missing, or if it contains empty
+     * string (""), or null, then it means Client wants to receive fee for all pairs.
+     */
     val pairs: List<String>
 )
