@@ -10,7 +10,7 @@ data class OrderRequest(
     val pair: String? = null,
     val side: String? = null,
     val accountIds: List<String>? = null,
-    //TODO add serverCreate
+    // TODO add serverCreate
     val sortOrder: Order = Order.Desc,
     val pageSize: Int? = null,
     val pageNumber: Int? = null
@@ -35,7 +35,7 @@ internal data class OrderRequestInternal(
     val pair: String? = null,
     val side: String? = null,
     val accountIds: List<String>? = null,
-    //TODO add serverCreate
+    // TODO add serverCreate
     val sortOrder: Order = Order.Desc,
     val pageSize: Int? = null,
     val pageNumber: Int? = null

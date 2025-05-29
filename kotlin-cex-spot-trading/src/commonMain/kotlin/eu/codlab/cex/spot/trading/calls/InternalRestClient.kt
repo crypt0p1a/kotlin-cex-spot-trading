@@ -13,13 +13,11 @@ import eu.codlab.cex.spot.trading.utils.ClientProvider
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 
-abstract class InternalRestClient(options: RestOptions = RestOptions()) {
-    @OptIn(ExperimentalSerializationApi::class)
+sealed class InternalRestClient(options: RestOptions = RestOptions()) {
     protected val json = Json {
         encodeDefaults = true
         ignoreUnknownKeys = true
@@ -30,6 +28,7 @@ abstract class InternalRestClient(options: RestOptions = RestOptions()) {
     protected val options: RestOptions = options.copy()
     protected val client = ClientProvider.createClient(options.timeout)
 
+    @Suppress("ThrowsCount")
     protected suspend fun <O> map(
         response: HttpResponse,
         deserializer: KSerializer<O>
@@ -43,13 +42,12 @@ abstract class InternalRestClient(options: RestOptions = RestOptions()) {
 
         return when (val mapped = JsonElementWrapper.to(result)) {
             is JsonElementArray -> {
-                return json.decodeFromJsonElement(deserializer, mapped.value)
+                json.decodeFromJsonElement(deserializer, mapped.value)
             }
 
             is JsonElementNull -> null
             is JsonElementObject -> {
                 val obj = mapped.value
-
 
                 if (obj.containsKey("ok") && obj.jsonString("ok") == "ok") {
                     val data = obj["data"] ?: throw RestClientPairException(response.status, obj)
@@ -63,7 +61,7 @@ abstract class InternalRestClient(options: RestOptions = RestOptions()) {
             }
 
             is JsonElementPrimitive -> {
-                return json.decodeFromJsonElement(deserializer, mapped.value)
+                json.decodeFromJsonElement(deserializer, mapped.value)
             }
         }
     }

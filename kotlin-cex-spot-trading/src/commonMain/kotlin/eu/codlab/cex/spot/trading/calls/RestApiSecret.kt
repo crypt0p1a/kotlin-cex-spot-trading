@@ -17,20 +17,21 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.math.round
 
 class RestApiSecret(
-    private val clientId: String,
     private val apiKey: String,
     private val apiSecret: String,
     options: RestOptions = RestOptions()
-) : InternalRestClient(options) {
+) : InternalRestClient(options),
+    IRestApi {
+    private val millisInSecond = 1000
 
-    suspend fun <O> call(
+    override suspend fun <O> call(
         action: String,
         deserializer: KSerializer<O>
     ): O? = call(action, null, Unit.serializer(), deserializer)
 
-    suspend fun <I, O> call(
+    override suspend fun <I, O> call(
         action: String,
-        params: I? = null,
+        params: I?,
         serializer: KSerializer<I>,
         deserializer: KSerializer<O>
     ): O? {
@@ -41,7 +42,7 @@ class RestApiSecret(
         }
 
         val url = options.host
-        val nonce = round(getTimeMillis() * 1.0 / 1000).toLong()
+        val nonce = round(getTimeMillis() * 1.0 / millisInSecond).toLong()
         val message = action + nonce + json.toString()
         val signature = signature(message)
 

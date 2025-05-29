@@ -14,7 +14,7 @@ object ClientProvider {
             enableLogs = true
         ),
         onAuth = {
-
+            // nothing
         },
         onRequest = {
             it.header(HttpHeaders.ContentType, "application/json")

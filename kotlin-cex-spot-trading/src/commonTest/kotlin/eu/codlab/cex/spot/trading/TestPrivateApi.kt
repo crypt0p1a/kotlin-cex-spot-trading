@@ -4,13 +4,13 @@ import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
 import eu.codlab.cex.spot.trading.groups.candles.CandleResolution
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPairs
-import eu.codlab.cex.spot.trading.groups.candles.DataType
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistoryRequest
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionType
-import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
 import eu.codlab.cex.spot.trading.groups.orders.OrderSide
-import eu.codlab.cex.spot.trading.models.Pairs
+import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
+import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
+import eu.codlab.cex.spot.trading.models.DataType
 import eu.codlab.configuration.Configuration
 import korlibs.time.DateTime
 import korlibs.time.hours

@@ -2,7 +2,6 @@ package eu.codlab.cex.spot.trading.groups.orders.news
 
 import eu.codlab.cex.spot.trading.groups.orders.OrderSide
 import eu.codlab.cex.spot.trading.groups.orders.OrderType
-import eu.codlab.cex.spot.trading.models.OrderStatus
 import korlibs.time.DateTime
 import kotlinx.serialization.Serializable
 
@@ -15,7 +14,6 @@ data class NewOrder(
     val side: OrderSide,
     val orderType: OrderType,
     val timestamp: Long = DateTime.nowUnixMillisLong(),
-    // val timeInForce: String,
     /**
      * 255 chars max
      */
@@ -40,4 +38,5 @@ data class NewOrder(
      * Stop Price for Stop and StopLimit types of orders.
      */
     val stopPrice: String? = null
+    // TODO : val timeInForce: String,
 )

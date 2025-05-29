@@ -1,6 +1,12 @@
 package eu.codlab.cex.spot.trading
 
+import eu.codlab.cex.spot.trading.groups.candles.CandleResolution
+import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
+import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPairs
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
+import eu.codlab.cex.spot.trading.models.DataType
+import korlibs.time.DateTime
+import korlibs.time.hours
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -35,25 +41,32 @@ class TestPublicApi {
     }
 
     @Test
-    fun candles() = runTest {
-        /*println(
-            api.candles(
-                CandleSinglePair(
-                    "ETH-EUR",
-                    fromISOMs = 1676041279412,
-                    limit = 10
-                )
+    fun testGetCandles() = runTest {
+        val candles = api.candles(
+            CandlesFromPair(
+                "BTC-USD",
+                dataType = DataType.BestBid,
+                resolution = CandleResolution.Res1h,
+                limit = null,
+                toISO = DateTime.now(),
+                fromISO = DateTime.now().minus(5.hours)
             )
         )
+        // assuming that a transaction exists
+        println("candles $candles")
 
-        println(
-            api.candles(
-                CandlePairs(
-                    listOf("ETH-EUR", "ETH-USD"),
-                    fromISOMs = 1676041279412
-                )
+        val others = api.candles(
+            CandlesFromPairs(
+                pairsList = listOf("BTC-USD"),
+                dataType = DataType.BestBid,
+                resolution = CandleResolution.Res1h,
+                toISO = null,
+                // toISO = DateTime.now(),
+                fromISO = DateTime.now().minus(5.hours)
             )
-        )*/
+        )
+        // assuming that a transaction exists
+        println("others $others")
     }
 
     @Test

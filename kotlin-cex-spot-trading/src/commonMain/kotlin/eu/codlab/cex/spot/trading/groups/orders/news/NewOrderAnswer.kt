@@ -18,7 +18,6 @@ data class NewOrderAnswer(
     val side: OrderSide,
     val orderType: OrderType,
     val timestamp: Long = DateTime.nowUnixMillisLong(),
-    // val timeInForce: String,
     /**
      * 255 chars max
      */
@@ -27,19 +26,24 @@ data class NewOrderAnswer(
     val rejectCode: Int? = null,
     val rejectReason: String? = null,
     /**
-     * Represents executed amount in currency1. If this value is 0, then it means there is no executed amount (order has no executions).
+     * Represents executed amount in currency1. If this value is 0, then it means there is no
+     * executed amount (order has no executions).
      */
     val executedAmountCcy1: String,
     /**
-     * Represents executed amount in currency2. If this value is 0, then it means there is no executed amount (order has no executions).
+     * Represents executed amount in currency2. If this value is 0, then it means there is no
+     * executed amount (order has no executions).
      */
     val executedAmountCcy2: String,
     /**
-     * Represents order amount in currency1, which was requested by Client. If this value is null, then it means there is no requested amount in currency1 (order should have then requested amount in currency2)
+     * Represents order amount in currency1, which was requested by Client. If this value is null,
+     * then it means there is no requested amount in currency1 (order should have then requested
+     * amount in currency2)
      */
     val requestedAmountCcy1: String,
     /**
-     * Represents order amount in currency2, which was requested by Client. If this value is null, then it means there is no requested amount in currency2 (order should have then requested amount in currency1).
+     * Represents order amount in currency2, which was requested by Client. If this value is null,
+     * then it means there is no requested amount in currency2 (order should have then requested amount in currency1).
      */
     val requestedAmountCcy2: String,
     /**
@@ -47,7 +51,8 @@ data class NewOrderAnswer(
      */
     val amountCcy2: String,
     /**
-     * Represents order commission amount, which was charged for this order . If this value is 0, then it means there is no commission amount charged for this order so far.
+     * Represents order commission amount, which was charged for this order . If this value is 0,
+     * then it means there is no commission amount charged for this order so far.
      */
     val feeAmount: String,
     /**
@@ -59,7 +64,8 @@ data class NewOrderAnswer(
      */
     val price: String,
     /**
-     * Represents average order execution price. If this value is null, then it means there is no executed amount (order has no executions).
+     * Represents average order execution price. If this value is null, then it means there is no
+     * executed amount (order has no executions).
      */
     val averagePrice: String? = null,
     /**
@@ -67,7 +73,10 @@ data class NewOrderAnswer(
      */
     val expireTime: Long? = null,
     /**
-     * UTC timestamp in milliseconds. Represents an effective timestamp provided by Client during creation of the order. If this value is null, then it means that Client did not provide effective time during order creation.
+     * UTC timestamp in milliseconds. Represents an effective timestamp provided by Client during
+     * creation of the order. If this value is null, then it means that Client did not provide
+     * effective time during order creation.
      */
     val effectiveTime: Long? = null
+    // TODO : val timeInForce: String,
 )

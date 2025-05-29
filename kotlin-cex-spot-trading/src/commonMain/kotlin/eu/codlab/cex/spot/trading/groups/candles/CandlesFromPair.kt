@@ -1,10 +1,9 @@
 package eu.codlab.cex.spot.trading.groups.candles
 
 import eu.codlab.cex.spot.trading.models.DataType
-import kotlinx.serialization.Serializable
+import korlibs.time.DateTime
 
-@Serializable
-internal data class GetCandles(
+data class CandlesFromPair(
     /**
      * Trading pair, for which Client wants to receive historical OHLCV candles. Trading pair should
      * contain two currencies in uppercase divided by “-“ symbol. Pair should be listed in
@@ -12,16 +11,9 @@ internal data class GetCandles(
      * contains valid value, then it means Client wants to receive OHLCV candles for one specific
      * trading pair. If "pair" field is present, then "pairsList" field should be absent.
      * Either "pair" or "pairsList" should be indicated in the request anyway.
+     *
      */
-    val pair: String? = null,
-    /**
-     * Array with trading pairs, for which Client wants to receive last historical OHLCV candles.
-     * At least 1 trading pair should be indicated in this field. If this field is present and
-     * contains valid values, then it means Client wants to receive last OHLCV candle for each
-     * indicated trading pair in the list. If "pairsList" field is present, then "pair" field
-     * should be absent. Either "pairsList" or "pair" should be indicated in the request anyway.
-     */
-    val pairsList: List<String>? = null,
+    val pair: String,
     /**
      * The starting moment of time of the requested period for which OHLCV candles should be
      * returned - UTC timestamp in milliseconds. If this field is present and contains valid value,
@@ -29,14 +21,14 @@ internal data class GetCandles(
      * indicated moment of time. Either "fromISO" or "toISO" should be indicated in the request
      * anyway.
      */
-    val fromISO: Long? = null,
+    val fromISO: DateTime?,
     /**
      * The last moment of time of the requested period for which OHLCV candles should be returned -
      * UTC timestamp in milliseconds. If this field is present and contains valid value, then it
      * means Client wants to receive OHLCV candles, the last one of which includes indicated moment
      * of time. Either "fromISO" or "toISO" should be indicated in the request anyway.
      */
-    val toISO: Long? = null,
+    val toISO: DateTime?,
     /**
      * Maximum number of OHLCV candles to be returned in response. Indicated number should be
      * greater than zero. This field is mandatory if at least one of “fromISO” or “toISO” fields is
@@ -63,4 +55,13 @@ internal data class GetCandles(
      * - “1d”.
      */
     val resolution: CandleResolution
-)
+) : Candles() {
+    override fun toGetCandles() = GetCandles(
+        pair = pair,
+        fromISO = fromISO?.unixMillisLong,
+        toISO = toISO?.unixMillisLong,
+        limit = limit,
+        dataType = dataType,
+        resolution = resolution
+    )
+}
