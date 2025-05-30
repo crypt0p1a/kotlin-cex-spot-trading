@@ -5,6 +5,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.jsonObject
 
 class RestApiPublic(options: RestOptions = RestOptions()) :
     InternalRestClient(options),
@@ -28,7 +29,11 @@ class RestApiPublic(options: RestOptions = RestOptions()) :
     ): O? {
         val url = options.host
 
-        val mapped = json.encodeToJsonElement(serializer, params)
+        val mapped = if (null != params) {
+            json.encodeToJsonElement(serializer, params).jsonObject
+        } else {
+            json.parseToJsonElement("{}")
+        }
 
         val response = client.post("$url/rest-public/$action") {
             setBody(mapped)

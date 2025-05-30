@@ -1,5 +1,5 @@
 [versions]
-http-client = "1.15.0"
+http-client = "1.19.0"
 crypto = "0.5.1"
 korio = "4.0.10"
 

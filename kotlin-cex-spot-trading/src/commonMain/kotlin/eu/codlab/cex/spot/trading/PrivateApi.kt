@@ -144,6 +144,17 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
+    suspend fun orders() = orders(OrderRequest())
+
+    /**
+     * This request allows Client to find out info about his orders.
+     *
+     * Duplicated clientOrderIds
+     * If Client has several orders with the same clientOrderId (if orders were created in a
+     * significant period of time) and will query orders by clientOrderId, response will return an
+     * array with all orders’ details in which requested clientOrderId has been indicated by the
+     * Client.
+     */
     suspend fun orders(symbols: Pair<String, String>) = orders(
         OrderRequest(
             pair = "${symbols.first}-${symbols.second}"

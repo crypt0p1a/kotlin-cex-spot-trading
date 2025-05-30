@@ -3,6 +3,7 @@ plugins {
     alias(additionals.plugins.android.library)
     alias(additionals.plugins.kotlin.serialization)
     id("publication")
+    id("iosSimulatorConfiguration")
     id("jvmCompat")
 }
 
