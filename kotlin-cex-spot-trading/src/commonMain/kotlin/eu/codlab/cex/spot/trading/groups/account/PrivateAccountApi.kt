@@ -9,16 +9,19 @@ import eu.codlab.cex.spot.trading.groups.account.create.CreateAccountResult
 import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.models.TradingFees
+import eu.codlab.cex.spot.trading.rest.RestOptions
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 
 class PrivateAccountApi internal constructor(
     apiKey: String,
-    apiSecret: String
+    apiSecret: String,
+    restOptions: RestOptions
 ) {
     private val call = RestApiSecret(
         apiKey,
-        apiSecret
+        apiSecret,
+        restOptions
     )
 
     /**

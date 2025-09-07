@@ -1,22 +1,19 @@
 package eu.codlab.cex.spot.trading
 
-import eu.codlab.cex.spot.trading.calls.RestApiPublic
 import eu.codlab.cex.spot.trading.groups.currency.CurrencyInfo
 import eu.codlab.cex.spot.trading.groups.pairsinfo.PairInfo
-import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.processing.ProcessingInfo
 import eu.codlab.cex.spot.trading.groups.ticker.Ticker
-import eu.codlab.cex.spot.trading.models.Currencies
 import eu.codlab.cex.spot.trading.models.ServerTime
-import eu.codlab.cex.spot.trading.rest.RestOptions
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 
-class PublicApi(
-    restOptions: RestOptions = RestOptions()
-) : CommonApi(), IPublicApi {
-    override val call = RestApiPublic(restOptions)
+interface IPublicApi : ICommonApi {
+    /**
+     * This method is designed to obtain current information about Ticker, including data about
+     * current prices, 24h price & volume changes, last trade event etc. of certain assets.
+     *
+     * https://trade.cex.io/docs/#rest-public-api-calls-trade-history
+     */
+    suspend fun tickers(vararg pair: String): Map<String, Ticker>
 
     /**
      * This method is designed to obtain current information about Ticker, including data about
@@ -24,24 +21,7 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-trade-history
      */
-    override suspend fun tickers(vararg pair: String) = tickers(pair.asList())
-
-    /**
-     * This method is designed to obtain current information about Ticker, including data about
-     * current prices, 24h price & volume changes, last trade event etc. of certain assets.
-     *
-     * https://trade.cex.io/docs/#rest-public-api-calls-trade-history
-     */
-    override suspend fun tickers(pairs: List<String>) =
-        call.call(
-            "/get_ticker",
-            Pairs(pairs),
-            Pairs.serializer(),
-            MapSerializer(
-                String.serializer(),
-                Ticker.serializer()
-            )
-        )
+    suspend fun tickers(pairs: List<String>): Map<String, Ticker>
 
     /**
      * This method is used to get the current time on Spot Trading server. It can be useful for
@@ -49,29 +29,21 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-server-time
      */
-    override suspend fun serverTime() = call.call("/get_server_time", ServerTime.serializer())
+    suspend fun serverTime(): ServerTime
 
     /**
      * Pair Info method allows Client to receive the parameters for all supported trading pairs.
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-pairs-info
      */
-    override suspend fun pairsInfo(vararg pair: String) = pairsInfo(pair.asList())
+    suspend fun pairsInfo(vararg pair: String): List<PairInfo>
 
     /**
      * Pair Info method allows Client to receive the parameters for all supported trading pairs.
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-pairs-info
      */
-    override suspend fun pairsInfo(pairs: List<String>) =
-        call.call(
-            "/get_pairs_info",
-            Pairs(pairs),
-            Pairs.serializer(),
-            ListSerializer(
-                PairInfo.serializer()
-            )
-        )
+    suspend fun pairsInfo(pairs: List<String>): List<PairInfo>
 
     /**
      * Currencies Info method allows Client to receive the parameters for all currencies configured
@@ -80,12 +52,7 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-currencies-info
      */
-    override suspend fun currencyInfos() = call.call(
-        "get_currencies_info",
-        ListSerializer(
-            CurrencyInfo.serializer()
-        )
-    )
+    suspend fun currencyInfos(): List<CurrencyInfo>
 
     /**
      * This request allows Client to receive detailed information about available options to make
@@ -107,8 +74,7 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-processing-info
      */
-    override suspend fun processingInfo(vararg currencies: String) =
-        processingInfo(currencies.asList())
+    suspend fun processingInfo(vararg currencies: String): Map<String, ProcessingInfo>
 
     /**
      * This request allows Client to receive detailed information about available options to make
@@ -130,14 +96,5 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-processing-info
      */
-    override suspend fun processingInfo(currencies: List<String>) =
-        call.call(
-            "/get_processing_info",
-            Currencies(currencies),
-            Currencies.serializer(),
-            MapSerializer(
-                String.serializer(),
-                ProcessingInfo.serializer()
-            )
-        )
+    suspend fun processingInfo(currencies: List<String>): Map<String, ProcessingInfo>
 }

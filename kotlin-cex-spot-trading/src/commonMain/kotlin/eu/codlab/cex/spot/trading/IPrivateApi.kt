@@ -1,45 +1,31 @@
 package eu.codlab.cex.spot.trading
 
-import eu.codlab.cex.spot.trading.calls.RestApiSecret
-import eu.codlab.cex.spot.trading.groups.account.PrivateAccountApi
+import eu.codlab.cex.spot.trading.groups.account.balance.AccountBalance
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
+import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusResult
+import eu.codlab.cex.spot.trading.groups.account.create.CreateAccountResult
+import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawFromWalletResult
 import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawalFromWalletRequest
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistory
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistoryRequest
-import eu.codlab.cex.spot.trading.groups.orders.EmptyBody
 import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
-import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrders
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.volume.Volume
 import eu.codlab.cex.spot.trading.models.OrderRequest
-import eu.codlab.cex.spot.trading.models.OrderRequestInternal
 import eu.codlab.cex.spot.trading.models.OrderResult
-import eu.codlab.cex.spot.trading.rest.RestOptions
-import kotlinx.serialization.builtins.ListSerializer
+import eu.codlab.cex.spot.trading.models.TradingFees
 
-class PrivateApi(
-    apiKey: String,
-    apiSecret: String,
-    restOptions: RestOptions = RestOptions()
-) : CommonApi(), IPrivateApi {
-    private val account = PrivateAccountApi(apiKey, apiSecret, restOptions)
-
-    override val call = RestApiSecret(
-        apiKey,
-        apiSecret,
-        restOptions
-    )
-
+interface IPrivateApi : ICommonApi {
     /**
      * This method indicates current fees at specific moment of time with consideration of Client'
      * up-to-date 30d volume and day of week (fees can be different for e.g. on weekends).
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-current-fee
      */
-    override suspend fun getMyCurrentFee(pairs: Pairs) = account.getMyCurrentFee(pairs)
+    suspend fun getMyCurrentFee(pairs: Pairs): TradingFees
 
     /**
      * Fee Strategy returns all fee options, which could be applied for Client, considering Client’s
@@ -52,17 +38,14 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-fee-strategy
      */
-    override suspend fun getFeeStrategy() = account.getFeeStrategy()
+    suspend fun getFeeStrategy(): FeeStrategy
 
     /**
      * This request allows Client to receive his trading volume for the last 30 days in USD equivalent.
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-volume
      */
-    override suspend fun getMyVolume() = call.call(
-        "get_my_volume",
-        Volume.serializer()
-    )
+    suspend fun getMyVolume(): Volume
 
     /**
      * This request allows Client to create new sub-account.
@@ -78,8 +61,7 @@ class PrivateApi(
      * deposited to new sub-account (e.g. from Client's other Spot Trading sub-account, from CEX.IO
      * Wallet acount, from external crypto wallet etc.).
      */
-    override suspend fun createAccount(accountId: String, currency: String) =
-        account.createAccount(accountId, currency)
+    suspend fun createAccount(accountId: String, currency: String): CreateAccountResult
 
     /**
      * By using Account Status V3 method, Client can find out current balance and it’s indicative
@@ -96,8 +78,7 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-account-status-v3
      */
-    override suspend fun getMyAccountStatus(request: AccountStatusRequest) =
-        account.getMyAccountStatus(request)
+    suspend fun getMyAccountStatus(request: AccountStatusRequest): AccountStatusResult
 
     /**
      * This request allows Client to receive his CEX.IO Wallet balances, which can be useful for
@@ -107,7 +88,7 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-wallet-balance
      */
-    override suspend fun accountBalance() = account.accountBalance()
+    suspend fun accountBalance(): Map<String, AccountBalance>
 
     /**
      * This request allows Client to find out info about his orders.
@@ -118,12 +99,7 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders(request: OrderRequest) = call.call(
-        "get_my_orders",
-        request.to(),
-        OrderRequestInternal.serializer(),
-        ListSerializer(OrderResult.serializer())
-    )
+    suspend fun orders(request: OrderRequest): List<OrderResult>
 
     /**
      * This request allows Client to find out info about his orders.
@@ -134,11 +110,7 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders(orderId: String) = orders(
-        OrderRequest(
-            orderId = orderId
-        )
-    ).find { it.orderId == orderId }
+    suspend fun orders(orderId: String): OrderResult?
 
     /**
      * This request allows Client to find out info about his orders.
@@ -149,7 +121,7 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders() = orders(OrderRequest())
+    suspend fun orders(): List<OrderResult>
 
     /**
      * This request allows Client to find out info about his orders.
@@ -160,11 +132,7 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders(symbols: Pair<String, String>) = orders(
-        OrderRequest(
-            pair = "${symbols.first}-${symbols.second}"
-        )
-    )
+    suspend fun orders(symbols: Pair<String, String>): List<OrderResult>
 
     /**
      * This method works only with CEX.IO Spot Trading sub-accounts.
@@ -206,14 +174,9 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-new-order
      */
-    override suspend fun newOrder(
+    suspend fun newOrder(
         request: NewOrder
-    ) = call.call(
-        "do_my_new_order",
-        request,
-        NewOrder.serializer(),
-        NewOrderAnswer.serializer()
-    )
+    ): NewOrderAnswer
 
     /**
      * Client can cancel orders.
@@ -222,26 +185,16 @@ class PrivateApi(
      *
      * Will throw in case of errors
      */
-    override suspend fun cancelOrder(
+    suspend fun cancelOrder(
         request: CancelOrder
-    ) {
-        call.call(
-            "do_cancel_my_order",
-            request,
-            CancelOrder.serializer(),
-            EmptyBody.serializer()
-        )
-    }
+    )
 
     /**
      * Client can cancel all open orders via REST API.
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-cancel-all-orders
      */
-    override suspend fun cancelOrders() = call.call(
-        "do_cancel_all_orders",
-        CancelOrders.serializer()
-    ).clientOrderIds
+    suspend fun cancelOrders(): List<String>
 
     /**
      * This request allows Client to find his financial transactions (deposits, withdrawals,
@@ -249,26 +202,15 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-transaction-history
      */
-    override suspend fun transactionHistory(request: TransactionHistoryRequest) = call.call(
-        "get_my_transaction_history",
-        request,
-        TransactionHistoryRequest.serializer(),
-        ListSerializer(TransactionHistory.serializer())
-    )
+    suspend fun transactionHistory(
+        request: TransactionHistoryRequest
+    ): List<TransactionHistory>
 
-    override suspend fun fundsDepositFromWallet(request: DepositToOrWithdrawalFromWalletRequest) =
-        call.call(
-            "do_deposit_funds_from_wallet",
-            request,
-            DepositToOrWithdrawalFromWalletRequest.serializer(),
-            DepositToOrWithdrawFromWalletResult.serializer()
-        )
+    suspend fun fundsDepositFromWallet(
+        request: DepositToOrWithdrawalFromWalletRequest
+    ): DepositToOrWithdrawFromWalletResult
 
-    override suspend fun fundsWithdrawToWallet(request: DepositToOrWithdrawalFromWalletRequest) =
-        call.call(
-            "do_withdrawal_funds_to_wallet",
-            request,
-            DepositToOrWithdrawalFromWalletRequest.serializer(),
-            DepositToOrWithdrawFromWalletResult.serializer()
-        )
+    suspend fun fundsWithdrawToWallet(
+        request: DepositToOrWithdrawalFromWalletRequest
+    ): DepositToOrWithdrawFromWalletResult
 }

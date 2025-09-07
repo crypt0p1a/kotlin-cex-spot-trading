@@ -5,14 +5,15 @@ import kotlinx.serialization.json.JsonElement
 
 sealed class RestClientException(
     val statusCode: HttpStatusCode,
-) : Throwable()
+    message: String,
+) : Throwable(message)
 
 class RestClientNetworkException(
     statusCode: HttpStatusCode,
-    val body: String
-) : RestClientException(statusCode)
+    val body: String,
+) : RestClientException(statusCode, body)
 
 class RestClientPairException(
     statusCode: HttpStatusCode,
     val body: JsonElement
-) : RestClientException(statusCode)
+) : RestClientException(statusCode, body.toString())
