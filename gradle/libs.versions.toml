@@ -1,9 +1,12 @@
 [versions]
+java = "21"
 http-client = "1.19.0"
 crypto = "0.5.1"
 korio = "4.0.10"
+kotlinx-cli = "0.3.6"
 
 [libraries]
 http-client = { module = "eu.codlab:kotlin-http-client", version.ref = "http-client" }
 crypto = { module = "org.kotlincrypto.macs:hmac-sha2", version.ref = "crypto" }
 korio-klock = { module = "com.soywiz.korlibs.klock:klock", version.ref = "korio" }
+kotlinx-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version.ref = "kotlinx-cli" }
