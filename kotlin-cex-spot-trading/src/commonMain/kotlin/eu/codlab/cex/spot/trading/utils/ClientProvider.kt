@@ -6,12 +6,12 @@ import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 
 object ClientProvider {
-    fun createClient(timeout: Long) = createClient(
+    fun createClient(timeout: Long, enableLogs: Boolean) = createClient(
         configuration = Configuration(
             connectTimeoutMillis = timeout,
             socketTimeoutMillis = timeout,
             requestTimeoutMillis = timeout,
-            enableLogs = true
+            enableLogs = enableLogs
         ),
         onAuth = {
             // nothing
