@@ -1,5 +1,8 @@
 package eu.codlab.cex.spot.trading.models
 
+import eu.codlab.cex.spot.trading.groups.orders.OrderSide
+import eu.codlab.cex.spot.trading.groups.orders.OrderType
+import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
 import kotlinx.serialization.Serializable
 
 /**
@@ -47,17 +50,17 @@ data class OrderResult(
     /**
      * Represents side of this order.
      */
-    val side: String,
+    val side: OrderSide,
     /**
      * Represents order type of this order.
      */
-    val orderType: String,
+    val orderType: OrderType,
     /**
      * Represents time in force of this order. For details see "Order TimeInForce" section. This
      * value can be null for orders where time in force is not applied, for example, for Market
      * orders.
      */
-    val timeInForce: String,
+    val timeInForce: TimeInForce? = null,
     /**
      * Text, which was provided by Client during order creation. If value is null, then it means
      * Client did not provide such text during order creation.
@@ -141,17 +144,17 @@ data class OrderResult(
      */
     val lastUpdateTimestamp: Long,
     /**
-     * UTC timestamp in milliseconds. Represents an expired timestamp provided by Client during
+     * UTC timestamp in format YYYYMMDD-HH:mm:ss.SSS. Represents an expired timestamp provided by Client during
      * creation of the order. If this value is null, then it means Client did not provide expire
      * time during order creation.
      */
-    val expireTime: Long,
+    val expireTime: Long? = null,
     /**
      * UTC timestamp in milliseconds. Represents an effective timestamp provided by Client during
      * creation of the order. If this value is null, then it means that Client did not provide
      * effective time during order creation.
      */
-    val effectiveTime: Long,
+    val effectiveTime: Long? = null,
 )
 
 @Serializable

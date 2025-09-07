@@ -11,7 +11,7 @@ data class Candle(
     /**
      * Opening price of OHLCV candle in quote currency.
      */
-    val open: String? = null,
+    val open: Double? = null,
     /**
      * Highest price of OHLCV candle in quote currency, which was reached during candle timeframe.
      */

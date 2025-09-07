@@ -6,6 +6,12 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OrderRequest(
     /**
+     * Order identifier assigned by Client. If this field is present, then it means Client wants to
+     * see the status of the exact order. In this case, CEX.IO Spot Trading ignores all other
+     * parameters in "data" field.
+     */
+    val clientOrderId: String? = null,
+    /**
      * Order identifier assigned by CEX.IO Spot Trading. If both fields "orderId" and
      * "clientOrderId" are present, then CEX.IO Spot Trading ignores "orderId" field. If this field
      * is present (and "clientOrderId" is absent), then it means Client wants to see the status of
@@ -61,6 +67,22 @@ data class OrderRequest(
      * cannot be lower than 0.
      */
     val pageNumber: Int? = null,
+    /**
+     * UTC timestamp in milliseconds. Represents the earliest server timestamp when order is
+     * received. In the result set orders’ serverCreateTimestamp should be greater than or equal to
+     * (>=) serverCreateTimestampFrom. Period indicated by serverCreateTimestampFrom and
+     * serverCreateTimestampTo values can not be greater than 365 days. This parameter is mandatory
+     * if Client queries info about archived orders.
+     */
+    val serverCreateTimestampFrom: Long? = null,
+    /**
+     * UTC timestamp in milliseconds. Represents the latest server timestamp when order is received.
+     * In the result set orders’ serverCreateTimestamp should be less than (<)
+     * serverCreateTimestampTo. Period indicated by serverCreateTimestampFrom and
+     * serverCreateTimestampTo values can not be greater than 365 days. If this field is missing
+     * than current date is set by default.
+     */
+    val serverCreateTimestampTo: Long? = null,
     // TODO : add serverCreate
 ) {
     internal fun to() = OrderRequestInternal(
@@ -71,7 +93,9 @@ data class OrderRequest(
         accountIds = accountIds,
         sortOrder = sortOrder,
         pageSize = pageSize,
-        pageNumber = pageNumber
+        pageNumber = pageNumber,
+        serverCreateTimestampFrom = serverCreateTimestampFrom,
+        serverCreateTimestampTo = serverCreateTimestampTo,
     )
 }
 
@@ -86,7 +110,9 @@ internal data class OrderRequestInternal(
     // TODO add serverCreate
     val sortOrder: Order = Order.Desc,
     val pageSize: Int? = null,
-    val pageNumber: Int? = null
+    val pageNumber: Int? = null,
+    val serverCreateTimestampTo: Long? = null,
+    val serverCreateTimestampFrom: Long? = null,
 )
 
 @Serializable

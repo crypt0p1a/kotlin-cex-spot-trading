@@ -47,24 +47,24 @@ data class NewOrder(
      * Represents order amount in currency1. This value can be null if order requests amount in
      * currency2.
      */
-    val amountCcy1: String,
+    val amountCcy1: String?,
     /**
      * Represents order amount in currency2. This value can be null if order requests amount in
      * currency1.
      */
-    val amountCcy2: String,
+    val amountCcy2: String?,
     /**
      * Represents order price. Please omit this field for orders, where price cannot be requested,
      * for example, Market orders or Stop orders.
      */
     val price: String,
     /**
-     * UTC timestamp in milliseconds. If Expire Time is in the past, order will be rejected.
+     * UTC timestamp in format YYYYMMDD-HH:mm:ss.SSS. If Expire Time is in the past, order will be rejected.
      */
-    val expireTime: Long? = null,
+    val expireTime: String? = null,
     /**
      * Stop Price for Stop and StopLimit types of orders.
      */
-    val stopPrice: String? = null
-    // TODO : val timeInForce: String,
+    val stopPrice: String? = null,
+    val timeInForce: TimeInForce,
 )
