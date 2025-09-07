@@ -6,12 +6,14 @@ interface IRestApi {
     suspend fun <O> call(
         action: String,
         deserializer: KSerializer<O>
-    ): O?
+    ): O
 
     suspend fun <I, O> call(
         action: String,
         params: I? = null,
         serializer: KSerializer<I>,
         deserializer: KSerializer<O>
-    ): O?
+    ): O
+
+    fun close()
 }

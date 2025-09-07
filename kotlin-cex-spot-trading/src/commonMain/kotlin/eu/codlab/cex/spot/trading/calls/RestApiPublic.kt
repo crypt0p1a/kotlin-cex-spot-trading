@@ -1,44 +1,22 @@
 package eu.codlab.cex.spot.trading.calls
 
 import eu.codlab.cex.spot.trading.rest.RestOptions
-import io.ktor.client.request.get
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.jsonObject
 
-class RestApiPublic(options: RestOptions = RestOptions()) :
-    InternalRestClient(options),
-    IRestApi {
+class RestApiPublic(options: RestOptions = RestOptions()) : IRestApi {
+    private val actualApi = RestApi(PossibleRestSubEndpoint.Public, options)
+
     override suspend fun <O> call(
         action: String,
         deserializer: KSerializer<O>
-    ): O? {
-        val url = options.host
-
-        val response = client.get("$url/rest-public/$action")
-
-        return map(response, deserializer)
-    }
+    ) = actualApi.call(action, deserializer)
 
     override suspend fun <I, O> call(
         action: String,
         params: I?,
         serializer: KSerializer<I>,
         deserializer: KSerializer<O>
-    ): O? {
-        val url = options.host
+    ) = actualApi.call(action, params, serializer, deserializer)
 
-        val mapped = if (null != params) {
-            json.encodeToJsonElement(serializer, params).jsonObject
-        } else {
-            json.parseToJsonElement("{}")
-        }
-
-        val response = client.post("$url/rest-public/$action") {
-            setBody(mapped)
-        }
-
-        return map(response, deserializer)
-    }
+    override fun close()  = actualApi.close()
 }
