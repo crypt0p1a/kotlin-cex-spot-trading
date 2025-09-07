@@ -1,14 +1,29 @@
 /* * * * * * * * * * * * * * * * *
  * Default project info
  * * * * * * * * * * * * * * * * */
-def defaultVersion = "0.0.1"
+def defaultVersion = "0.0.4-alpha11"
 def defaultGroup = "eu.codlab"
 
+def repo = "crypt0p1a/kotlin-cex-spot-trading"
+
 ext {
+    javaVersion = "21"
     prop = { name, defValue ->
         return rootProject.properties.containsKey(name)
                 ? rootProject.properties[name] : defValue
     }
+
+    pomDescription = "Kotlin CEX Spot Trading"
+    pomInceptionYear = "2025"
+    pomUrl = "https://github.com/$repo"
+    pomLicenseName = "MIT License"
+    pomLicenseUrl = "https://github.com/$repo/blob/main/LICENSE"
+    pomLicenseDistribution = ""
+    pomDeveloperId = "codlab"
+    pomDeveloperName = "Kevin Le Perf"
+    pomDeveloperOrganization = "Codlabtech"
+    pomDeveloperOrganizationUrl = "https://codlab.eu"
+    pomScmUrl = "scm:git:github.com/${repo}.git"
 
     sonarUrl = prop("sonarUrl", null)
     sonarToken = prop("sonarToken", null)
