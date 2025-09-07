@@ -12,10 +12,10 @@ sealed class JsonElementWrapper {
     companion object {
         fun to(jsonElement: JsonElement): JsonElementWrapper {
             val callbacks: List<() -> JsonElementWrapper> = listOf(
-                { JsonElementNull },
-                { JsonElementArray(jsonElement.jsonArray) },
-                { JsonElementPrimitive(jsonElement.jsonPrimitive) },
                 { JsonElementObject(jsonElement.jsonObject) },
+                { JsonElementPrimitive(jsonElement.jsonPrimitive) },
+                { JsonElementArray(jsonElement.jsonArray) },
+                { JsonElementNull },
             )
 
             @Suppress("TooGenericExceptionCaught", "SwallowedException")

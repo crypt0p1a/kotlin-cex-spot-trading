@@ -26,13 +26,13 @@ sealed class InternalRestClient(options: RestOptions = RestOptions()) {
     }
 
     protected val options: RestOptions = options.copy()
-    protected val client = ClientProvider.createClient(options.timeout)
+    protected val client = ClientProvider.createClient(options.timeout, options.enableLogs)
 
     @Suppress("ThrowsCount")
     protected suspend fun <O> map(
         response: HttpResponse,
         deserializer: KSerializer<O>
-    ): O? {
+    ): O {
         if (response.status != HttpStatusCode.OK) {
             val text = response.bodyAsText()
             throw RestClientNetworkException(response.status, text)
@@ -41,11 +41,18 @@ sealed class InternalRestClient(options: RestOptions = RestOptions()) {
         val result = json.parseToJsonElement(response.bodyAsText())
 
         return when (val mapped = JsonElementWrapper.to(result)) {
+            is JsonElementNull -> throw IllegalStateException(
+                "The answer was null, this is unexpected. Please report"
+            )
+
             is JsonElementArray -> {
                 json.decodeFromJsonElement(deserializer, mapped.value)
             }
 
-            is JsonElementNull -> null
+            is JsonElementPrimitive -> {
+                json.decodeFromJsonElement(deserializer, mapped.value)
+            }
+
             is JsonElementObject -> {
                 val obj = mapped.value
 
@@ -58,10 +65,6 @@ sealed class InternalRestClient(options: RestOptions = RestOptions()) {
                 } else {
                     json.decodeFromJsonElement(deserializer, mapped.value)
                 }
-            }
-
-            is JsonElementPrimitive -> {
-                json.decodeFromJsonElement(deserializer, mapped.value)
             }
         }
     }
