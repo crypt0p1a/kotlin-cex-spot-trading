@@ -23,7 +23,6 @@ data class DepositToOrWithdrawFromWalletResult(
     val status: ApprovalStatus
 )
 
-
 @Serializable
 enum class ApprovalStatus {
     @SerialName("rejected")

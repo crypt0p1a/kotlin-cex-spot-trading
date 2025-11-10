@@ -1,32 +1,63 @@
 package eu.codlab.cex.spot.trading.calls
 
+import eu.codlab.cex.spot.trading.utils.Queue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlin.concurrent.atomics.AtomicInt
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
-import kotlin.concurrent.atomics.incrementAndFetch
-import kotlin.concurrent.atomics.minusAssign
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-class RateLimitQueue {
-    @OptIn(ExperimentalAtomicApi::class)
-    private val atomic = AtomicInt(0)
+@OptIn(ExperimentalAtomicApi::class, DelicateCoroutinesApi::class)
+class RateLimitQueue(
+    coroutineScope: CoroutineScope = GlobalScope,
+    private val apiTokenPoolMaximum: UInt = 30U,
+    private val apiTokenCreationInterval: Duration = 2.seconds,
 
-    @OptIn(ExperimentalAtomicApi::class)
-    suspend fun <T> enqueue(block: suspend () -> T): T {
-        atomic.incrementAndFetch()
+    private val logger: (tag: String, msg: String) -> Unit = { _, _ -> },
+) {
+    companion object {
+        private const val PREFIX = "[RateLimitQueue]"
+    }
 
-        while (atomic.load() >= 600) {
+    private val queue = Queue(coroutineScope)
+    private var count: UInt = apiTokenPoolMaximum
+
+    init {
+        coroutineScope.launch {
+            while (isActive) {
+                count++
+
+                if (count > apiTokenPoolMaximum) {
+                    count = apiTokenPoolMaximum
+                }
+
+                logger(PREFIX, "pool is now $count")
+
+                delay(apiTokenCreationInterval)
+            }
+        }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    suspend fun <T> enqueue(tag: String, block: suspend () -> T): T = queue.enqueue {
+        /**
+         * We normally expect API rate limit to hit after 10min and 600 calls
+         * but we are going to artificially give some rest beforehand...
+         */
+        while (count == 0U) {
+            logger(
+                PREFIX,
+                "$tag :: No token available (max:$apiTokenPoolMaximum)"
+            )
             delay(2.seconds)
         }
 
-        return try {
-            block().let {
-                atomic.minusAssign(1)
-                it
-            }
-        } catch (err: Throwable) {
-            atomic.minusAssign(1)
-            throw err
-        }
+        count--
+
+        block()
     }
 }

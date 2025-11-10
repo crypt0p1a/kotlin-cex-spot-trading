@@ -11,16 +11,27 @@ import eu.codlab.cex.spot.trading.groups.orders.OrderSide
 import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.models.DataType
+import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.configuration.Configuration
 import korlibs.time.DateTime
 import korlibs.time.hours
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class TestPrivateApi {
+    @OptIn(DelicateCoroutinesApi::class)
     val api = PrivateApi(
+        GlobalScope,
         Configuration.apiKey,
-        Configuration.apiSecret
+        Configuration.apiSecret,
+        RestOptions(
+            enableLogs = true,
+            rateLimitLog = { tag, text ->
+                println("$tag :: $text")
+            }
+        )
     )
 
     /**

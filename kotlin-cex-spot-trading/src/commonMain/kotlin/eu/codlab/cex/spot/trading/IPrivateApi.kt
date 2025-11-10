@@ -18,6 +18,7 @@ import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderResult
 import eu.codlab.cex.spot.trading.models.TradingFees
 
+@Suppress("TooManyFunctions")
 interface IPrivateApi : ICommonApi {
     /**
      * This method indicates current fees at specific moment of time with consideration of Client'

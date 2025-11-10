@@ -9,6 +9,7 @@ import kotlinx.cli.Subcommand
 import kotlinx.coroutines.runBlocking
 import kotlin.system.exitProcess
 
+@Suppress("LongMethod")
 @ExperimentalCli
 fun main(args: Array<String>) {
     val config = Config()

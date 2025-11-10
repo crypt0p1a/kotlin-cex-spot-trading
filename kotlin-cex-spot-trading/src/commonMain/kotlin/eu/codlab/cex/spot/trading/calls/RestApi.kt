@@ -6,17 +6,19 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.jsonObject
 
 class RestApi(
+    coroutineScope: CoroutineScope,
     private val subEndpoint: PossibleRestSubEndpoint,
+    private val apiConfiguration: ApiConfiguration,
     options: RestOptions = RestOptions(),
     private val hijackRequest: (HttpRequestBuilder.(action: String, body: String) -> Unit)? = null
 ) : InternalRestClient(options),
     IRestApi {
-    private val rateLimitQueue = RateLimitQueue()
 
     override suspend fun <O> call(
         action: String,
@@ -36,7 +38,7 @@ class RestApi(
         }
 
         val url = options.host
-        val response = rateLimitQueue.enqueue {
+        val response = apiConfiguration.rateLimitQueue.enqueue("/${subEndpoint.endpoint}/$action") {
             client.post("$url/${subEndpoint.endpoint}/$action") {
                 contentType(ContentType.Application.Json)
 

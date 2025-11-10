@@ -1,5 +1,6 @@
 package eu.codlab.cex.spot.trading
 
+import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.calls.RestApiSecret
 import eu.codlab.cex.spot.trading.groups.account.PrivateAccountApi
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
@@ -18,20 +19,26 @@ import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderRequestInternal
 import eu.codlab.cex.spot.trading.models.OrderResult
 import eu.codlab.cex.spot.trading.rest.RestOptions
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.builtins.ListSerializer
 
+@Suppress("TooManyFunctions")
 class PrivateApi(
+    coroutineScope: CoroutineScope,
     apiKey: String,
     apiSecret: String,
-    restOptions: RestOptions = RestOptions()
+    restOptions: RestOptions = RestOptions(),
+    apiConfiguration: ApiConfiguration = ApiConfiguration(),
 ) : CommonApi(), IPrivateApi {
-    private val account = PrivateAccountApi(apiKey, apiSecret, restOptions)
-
     override val call = RestApiSecret(
+        coroutineScope,
         apiKey,
         apiSecret,
-        restOptions
+        restOptions,
+        apiConfiguration
     )
+
+    private val account = PrivateAccountApi(call)
 
     /**
      * This method indicates current fees at specific moment of time with consideration of Client'
