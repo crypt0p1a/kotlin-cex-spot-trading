@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.seconds
 @OptIn(ExperimentalAtomicApi::class, DelicateCoroutinesApi::class)
 class RateLimitQueue(
     coroutineScope: CoroutineScope = GlobalScope,
-    private val apiTokenPoolMaximum: UInt = 20U,
+    private val apiTokenPoolMaximum: UInt = 10U,
     private val apiTokenCreationInterval: Duration = 2.seconds,
 
     private val logger: (tag: String, msg: String) -> Unit = { _, _ -> },
@@ -58,6 +58,11 @@ class RateLimitQueue(
 
         count--
 
-        block()
+        try {
+            block()
+        } catch (err: Throwable) {
+            logger(PREFIX, "$tag :: Error: ${err.message} / tokens: $count")
+            throw err
+        }
     }
 }
