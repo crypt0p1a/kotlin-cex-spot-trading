@@ -9,6 +9,5 @@ data class RestOptions(
     val enableLogs: Boolean = false,
     val rejectUnauthorized: Boolean = true,
     val host: String = "https://trade.cex.io/api/spot",
-    val log: (tag: String, text: String) -> Unit = { _, _ -> },
-    val rateLimitLog: (tag: String, text: String) -> Unit = { _, _ -> },
+    val log: (tag: String, text: String) -> Unit = { _, _ -> }
 )

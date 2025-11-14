@@ -12,7 +12,6 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.jsonObject
 
 class RestApi(
-    coroutineScope: CoroutineScope,
     private val subEndpoint: PossibleRestSubEndpoint,
     private val apiConfiguration: ApiConfiguration,
     options: RestOptions = RestOptions(),

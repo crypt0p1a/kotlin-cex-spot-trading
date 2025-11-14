@@ -5,7 +5,6 @@ import io.ktor.client.request.headers
 import io.ktor.client.request.setBody
 import io.ktor.util.date.getTimeMillis
 import io.ktor.utils.io.core.toByteArray
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.KSerializer
 import org.kotlincrypto.macs.hmac.sha2.HmacSHA256
 import kotlin.io.encoding.Base64
@@ -13,7 +12,6 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.math.round
 
 class RestApiSecret(
-    coroutineScope: CoroutineScope,
     private val apiKey: String,
     private val apiSecret: String,
     options: RestOptions = RestOptions(),
@@ -22,7 +20,6 @@ class RestApiSecret(
     private val millisInSecond = 1000
 
     private val actualApi = RestApi(
-        coroutineScope,
         PossibleRestSubEndpoint.Private,
         apiConfiguration,
         options

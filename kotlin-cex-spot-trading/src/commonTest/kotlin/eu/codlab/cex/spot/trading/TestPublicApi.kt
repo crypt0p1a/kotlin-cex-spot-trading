@@ -7,14 +7,11 @@ import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithT
 import eu.codlab.cex.spot.trading.models.DataType
 import korlibs.time.DateTime
 import korlibs.time.hours
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class TestPublicApi {
-    @OptIn(DelicateCoroutinesApi::class)
-    val api = PublicApi(GlobalScope)
+    val api = PublicApi()
 
     @Test
     fun testCurrencyInfos() = runTest {

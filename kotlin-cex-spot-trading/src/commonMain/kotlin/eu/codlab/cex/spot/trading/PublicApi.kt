@@ -10,17 +10,18 @@ import eu.codlab.cex.spot.trading.groups.ticker.Ticker
 import eu.codlab.cex.spot.trading.models.Currencies
 import eu.codlab.cex.spot.trading.models.ServerTime
 import eu.codlab.cex.spot.trading.rest.RestOptions
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 
 class PublicApi(
-    coroutineScope: CoroutineScope,
     restOptions: RestOptions = RestOptions(),
     apiConfiguration: ApiConfiguration = ApiConfiguration(),
 ) : CommonApi(), IPublicApi {
-    override val call = RestApiPublic(coroutineScope, restOptions, apiConfiguration)
+    override val call = RestApiPublic(
+        restOptions,
+        apiConfiguration
+    )
 
     /**
      * This method is designed to obtain current information about Ticker, including data about

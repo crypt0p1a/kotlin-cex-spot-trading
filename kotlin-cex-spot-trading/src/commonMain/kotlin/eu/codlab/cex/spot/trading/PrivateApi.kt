@@ -19,19 +19,16 @@ import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderRequestInternal
 import eu.codlab.cex.spot.trading.models.OrderResult
 import eu.codlab.cex.spot.trading.rest.RestOptions
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.builtins.ListSerializer
 
 @Suppress("TooManyFunctions")
 class PrivateApi(
-    coroutineScope: CoroutineScope,
     apiKey: String,
     apiSecret: String,
     restOptions: RestOptions = RestOptions(),
     apiConfiguration: ApiConfiguration = ApiConfiguration(),
 ) : CommonApi(), IPrivateApi {
     override val call = RestApiSecret(
-        coroutineScope,
         apiKey,
         apiSecret,
         restOptions,

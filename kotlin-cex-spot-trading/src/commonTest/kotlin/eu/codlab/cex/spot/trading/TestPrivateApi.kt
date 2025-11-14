@@ -15,23 +15,14 @@ import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.configuration.Configuration
 import korlibs.time.DateTime
 import korlibs.time.hours
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class TestPrivateApi {
-    @OptIn(DelicateCoroutinesApi::class)
     val api = PrivateApi(
-        GlobalScope,
         Configuration.apiKey,
         Configuration.apiSecret,
-        RestOptions(
-            enableLogs = true,
-            rateLimitLog = { tag, text ->
-                println("$tag :: $text")
-            }
-        )
+        RestOptions(enableLogs = true)
     )
 
     /**
