@@ -7,13 +7,16 @@
 uniffi::setup_scaffolding!("cex_spot_trading");
 
 mod client;
+mod common;
 mod error;
 mod lenient;
 pub mod models;
+mod public;
 mod rate_limit;
 
 pub use client::RestOptions;
 pub use error::CexError;
+pub use public::PublicApi;
 pub use rate_limit::{Logger, RateLimiter};
 
 pub(crate) fn now_millis() -> i64 {

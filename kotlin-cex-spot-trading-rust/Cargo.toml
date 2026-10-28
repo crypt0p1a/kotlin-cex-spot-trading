@@ -11,6 +11,9 @@ name = "cex_spot_trading"
 crate-type = ["lib", "cdylib", "staticlib"]
 path = "src/commonMain/rust/lib.rs"
 
+[[test]]
+name = "public_api"
+path = "src/commonTest/rust/public_api.rs"
 
 [dependencies]
 base64.workspace = true
