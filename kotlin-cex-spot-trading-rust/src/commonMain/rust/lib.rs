@@ -3,12 +3,15 @@
 //! Rust port of the `kotlin-cex-spot-trading` Kotlin Multiplatform library: [`PublicApi`] and
 //! [`PrivateApi`] expose the endpoints documented in <https://trade.cex.io/docs/#rest>, sharing a
 //! [`RateLimiter`] which keeps the calls under the limits of the platform.
+//!
+//! The [`ffi`] module exports them through UniFFI, for the Kotlin Multiplatform bindings.
 
 uniffi::setup_scaffolding!("cex_spot_trading");
 
 mod client;
 mod common;
 mod error;
+pub mod ffi;
 mod lenient;
 pub mod models;
 mod private;
