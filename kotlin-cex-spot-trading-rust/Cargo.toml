@@ -1,0 +1,27 @@
+[package]
+name = "cex-spot-trading"
+description = "CEX.IO Spot Trading REST client, exported to Kotlin Multiplatform through UniFFI"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "cex_spot_trading"
+crate-type = ["lib", "cdylib", "staticlib"]
+path = "src/commonMain/rust/lib.rs"
+
+
+[dependencies]
+base64.workspace = true
+hmac.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["sync", "time"] }
+uniffi = { workspace = true, features = ["tokio"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "test-util"] }

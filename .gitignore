@@ -33,3 +33,6 @@ tmp/
 **/xcuserdata/
 
 repository/
+
+# Rust
+/target
