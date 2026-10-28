@@ -1,0 +1,68 @@
+# kotlin-cex-spot-trading-rust
+
+Rust port of `kotlin-cex-spot-trading`, exposed to Kotlin Multiplatform through
+[UniFFI](https://mozilla.github.io/uniffi-rs/) and the
+[UniFFI Kotlin Multiplatform plugin](https://github.com/UbiqueInnovation/uniffi-kotlin-multiplatform-bindings)
+(`ch.ubique.uniffi.plugin`), like the `shared-rust` module of Fetoly.
+
+| Folder                | Content                                                                        |
+|-----------------------|--------------------------------------------------------------------------------|
+| `src/commonMain/rust` | `cex-spot-trading` crate: client, models, rate limiter and its UniFFI facade (`ffi.rs`) |
+| `src/commonMain/kotlin` | Kotlin API on the generated bindings: `PublicApi`, `PrivateApi`, `ApiConfiguration` |
+| `src/commonTest/rust` | Rust tests calling the real CEX.IO API (ignored by default)                    |
+| `src/commonTest/kotlin` | Kotlin tests on the Rust library, calling the real CEX.IO API               |
+
+The crate is a member of the Cargo workspace at the root of the repository. The plugin builds it
+for each Kotlin target and generates the bindings in `eu.codlab.cex.spot.trading.rust.bindings`.
+
+## Targets
+
+`jvm` (the host library is bundled in the jar), `android`, `iosArm64`, `iosSimulatorArm64`,
+`macosArm64`. There is no `js`: the Rust code is called through JNA / cinterop.
+
+## Usage
+
+```kotlin
+val configuration = ApiConfiguration() // share it: CEX.IO limits the calls per client
+
+val publicApi = PublicApi(apiConfiguration = configuration)
+publicApi.tickers("BTC-USD")
+
+val privateApi = PrivateApi("apiKey", "apiSecret", apiConfiguration = configuration)
+privateApi.orders("BTC" to "USD")
+```
+
+The failures are thrown as `CexException` (`Network`, `Api`, `Transport`, `Decode`). Call
+`close()` / `shutdown()` to release the native objects.
+
+```rust
+let api = PublicApi::new(RestOptions::default(), Arc::new(RateLimiter::default()))?;
+api.server_time().await?;
+```
+
+## Build and test
+
+Requires rustup with the targets of the platforms to build (`aarch64-linux-android`,
+`armv7-linux-androideabi`, `i686-linux-android`, `x86_64-linux-android`, `aarch64-apple-ios`,
+`aarch64-apple-ios-sim`) and the NDK `ndkVersion` of the gradle-tools catalog. The first build
+compiles the UniFFI generator (~6 to 10 minutes), kept in `build/uniffi/bindgen`.
+
+```sh
+cargo test                       # Rust unit tests
+cargo test -- --include-ignored  # + calls to the real CEX.IO API
+./gradlew :kotlin-cex-spot-trading-rust:jvmTest :kotlin-cex-spot-trading-rust:macosArm64Test
+```
+
+The Rust library is built in debug unless `-PreleaseBuild=true` is given to Gradle.
+
+## Differences with the Kotlin library
+
+- `Ticker`: every field is optional, CEX.IO currently only sends bestBid, bestAsk, last, volume,
+  volumeUSD and priceChangePercentage (the Kotlin model fails to decode it)
+- empty pair / currency lists are omitted (CEX.IO rejects `"pairs": []`), so `pairsInfo()` returns
+  all the pairs
+- `OrderRequest.clientOrderId` is sent (dropped by the Kotlin library), `side` is an `OrderSide`
+- the leading `/` of the actions is removed, from the URL and from the signed message
+- `NewOrder.price` is optional (market orders), `OrderResult.expireTime` is a string
+- dates are UTC milliseconds (`fromMs`, `toMs`) instead of klock `DateTime`
+- `Blockchain.type` is `blockchainType`, `StrategyConfig.default` is `defaultFees`

@@ -50,6 +50,17 @@ val publicInstance = PublicApi()
 Both will expose the endpoints documented in the [cex's documentation](https://trade.cex.io/docs/#rest)
 
 
+### Rust implementation
+
+The `kotlin-cex-spot-trading-rust` module holds a Rust implementation of the same API, exported to
+Kotlin Multiplatform with UniFFI. See [its README](kotlin-cex-spot-trading-rust/README.md).
+
+## Build
+
+The build relies on [gradle-tools](https://github.com/the-inkwell/gradle-tools), at the commit
+`GRADLE_EXTENDED_VERSION_USED` of `gradle.properties`: Gradle 9.7, AGP 9.3 and Kotlin 2.4.20, as
+required by the UniFFI plugin of the Rust module.
+
 ## Run tests
 
 ```sh
