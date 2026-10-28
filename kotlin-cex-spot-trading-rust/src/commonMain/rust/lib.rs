@@ -11,11 +11,13 @@ mod common;
 mod error;
 mod lenient;
 pub mod models;
+mod private;
 mod public;
 mod rate_limit;
 
 pub use client::RestOptions;
 pub use error::CexError;
+pub use private::PrivateApi;
 pub use public::PublicApi;
 pub use rate_limit::{Logger, RateLimiter};
 
