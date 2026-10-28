@@ -1,22 +1,15 @@
 buildscript {
-    ext.kotlin_version = "1.9.23"
-
     apply from: gradle.extended.files.modules
     apply from: "gradle/versions.gradle"
-
-    dependencies {
-        classpath additionals.sonarqube.gradlePlugin
-        classpath additionals.nexus.gradlePlugin
-        classpath additionals.license.gradlePlugin
-    }
 }
 
 plugins {
     alias(additionals.plugins.publish.nexus)
-    alias(additionals.plugins.android.library) apply false
+    alias(additionals.plugins.android.kotlin.multiplatform.library) apply false
     alias(additionals.plugins.kotlin.multiplatform) apply false
     alias(additionals.plugins.kotlin.jvm) apply false
     alias(additionals.plugins.multiplatform.buildkonfig) apply false
+    alias(additionals.plugins.ubique.uniffi) apply false
     id("idea")
 }
 
@@ -51,7 +44,7 @@ subprojects {
     group = rootProject.ext.group
     version = rootProject.ext.version
 
-    task allDeps(type: DependencyReportTask) {}
+    tasks.register("allDeps", DependencyReportTask)
 
     if (isSourcesModule(it)) {
         apply from: gradle.extended.files.moduleSetup

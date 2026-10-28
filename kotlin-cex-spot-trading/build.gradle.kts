@@ -1,6 +1,6 @@
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
-    alias(additionals.plugins.android.library)
+    alias(additionals.plugins.android.kotlin.multiplatform.library)
     alias(additionals.plugins.kotlin.serialization)
     id("publication")
     id("iosSimulatorConfiguration")
@@ -8,8 +8,10 @@ plugins {
 }
 
 kotlin {
-    androidTarget {
-        publishLibraryVariants("release")
+    android {
+        namespace = "eu.codlab.cex.spot.trading"
+        compileSdk = additionals.versions.compileSdkVersion.get().toInt()
+        minSdk = additionals.versions.minSdkVersion.get().toInt()
     }
 
     jvm()
@@ -30,10 +32,7 @@ kotlin {
     linuxX64()
 
     sourceSets {
-        val commonMain by getting {
-            kotlin {
-                srcDirs.add(File("src/commonMain/kotlin"))
-            }
+        commonMain {
             dependencies {
                 implementation(libs.http.client)
                 implementation(libs.crypto)
@@ -41,7 +40,7 @@ kotlin {
                 implementation(additionals.kotlinx.serialization.json)
             }
         }
-        val commonTest by getting {
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(additionals.kotlinx.coroutines.core)
@@ -50,8 +49,4 @@ kotlin {
             }
         }
     }
-}
-
-android {
-    namespace = "eu.codlab.cex.spot.trading"
 }
