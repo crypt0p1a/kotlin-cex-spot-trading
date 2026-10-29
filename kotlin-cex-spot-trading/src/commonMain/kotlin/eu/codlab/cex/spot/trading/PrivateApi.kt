@@ -237,12 +237,8 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-transaction-history
      */
-    override suspend fun transactionHistory(request: TransactionHistoryRequest) = call.call(
-        "get_my_transaction_history",
-        request,
-        TransactionHistoryRequest.serializer(),
-        ListSerializer(TransactionHistory.serializer())
-    )
+    override suspend fun transactionHistory(request: TransactionHistoryRequest) =
+        rustCall { rust.transactionHistory(request.toRust()).map { it.toKotlin() } }
 
     override suspend fun fundsDepositFromWallet(request: DepositToOrWithdrawalFromWalletRequest) =
         call.call(

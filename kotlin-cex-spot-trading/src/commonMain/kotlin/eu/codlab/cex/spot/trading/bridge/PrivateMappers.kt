@@ -9,6 +9,9 @@ import eu.codlab.cex.spot.trading.groups.account.fees.TradingFeeBalancesForAccou
 import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.fees.FeeVolume
 import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
+import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistory
+import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistoryRequest
+import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionType
 import eu.codlab.cex.spot.trading.groups.orders.OrderType
 import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
@@ -42,6 +45,9 @@ import eu.codlab.cex.spot.trading.rust.bindings.TimeInForce as RustTimeInForce
 import eu.codlab.cex.spot.trading.rust.bindings.TradingFee as RustTradingFee
 import eu.codlab.cex.spot.trading.rust.bindings.TradingFeeBalancesForAccount as RustTradingFeeBalancesForAccount
 import eu.codlab.cex.spot.trading.rust.bindings.TradingFees as RustTradingFees
+import eu.codlab.cex.spot.trading.rust.bindings.TransactionHistory as RustTransactionHistory
+import eu.codlab.cex.spot.trading.rust.bindings.TransactionHistoryRequest as RustTransactionHistoryRequest
+import eu.codlab.cex.spot.trading.rust.bindings.TransactionType as RustTransactionType
 import eu.codlab.cex.spot.trading.rust.bindings.Volume as RustVolume
 
 internal fun RustTradingFees.toKotlin() = TradingFees(
@@ -243,4 +249,40 @@ internal fun CancelOrder.toRust() = RustCancelOrder(
     clientOrderId = clientOrderId,
     cancelRequestId = cancelRequestId,
     timestamp = timestamp,
+)
+
+internal fun TransactionHistoryRequest.toRust() = RustTransactionHistoryRequest(
+    accountId = accountId,
+    transactionType = type.toRust(),
+    dateFrom = dateFrom,
+    dateTo = dateTo,
+    sortOrder = sortOrder?.toRust(),
+    pageSize = pageSize,
+    pageNumber = pageNumber,
+)
+
+internal fun TransactionType.toRust() = when (this) {
+    TransactionType.Trade -> RustTransactionType.TRADE
+    TransactionType.Deposit -> RustTransactionType.DEPOSIT
+    TransactionType.Withdraw -> RustTransactionType.WITHDRAW
+    TransactionType.InternalTransfer -> RustTransactionType.INTERNAL_TRANSFER
+    TransactionType.Commission -> RustTransactionType.COMMISSION
+}
+
+internal fun RustTransactionType.toKotlin() = when (this) {
+    RustTransactionType.TRADE -> TransactionType.Trade
+    RustTransactionType.DEPOSIT -> TransactionType.Deposit
+    RustTransactionType.WITHDRAW -> TransactionType.Withdraw
+    RustTransactionType.INTERNAL_TRANSFER -> TransactionType.InternalTransfer
+    RustTransactionType.COMMISSION -> TransactionType.Commission
+}
+
+internal fun RustTransactionHistory.toKotlin() = TransactionHistory(
+    transactionId = transactionId,
+    timestamp = timestamp,
+    accountId = accountId,
+    type = transactionType.toKotlin(),
+    amount = amount,
+    details = details,
+    currency = currency,
 )
