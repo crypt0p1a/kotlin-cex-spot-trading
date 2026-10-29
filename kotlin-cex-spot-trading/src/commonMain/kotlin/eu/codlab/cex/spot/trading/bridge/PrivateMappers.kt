@@ -10,6 +10,8 @@ import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.fees.FeeVolume
 import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
 import eu.codlab.cex.spot.trading.groups.orders.OrderType
+import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
+import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
 import eu.codlab.cex.spot.trading.groups.volume.Volume
 import eu.codlab.cex.spot.trading.models.Order
@@ -25,6 +27,8 @@ import eu.codlab.cex.spot.trading.rust.bindings.BalanceForAccount as RustBalance
 import eu.codlab.cex.spot.trading.rust.bindings.CreateAccountResult as RustCreateAccountResult
 import eu.codlab.cex.spot.trading.rust.bindings.FeeStrategy as RustFeeStrategy
 import eu.codlab.cex.spot.trading.rust.bindings.FeeVolume as RustFeeVolume
+import eu.codlab.cex.spot.trading.rust.bindings.NewOrder as RustNewOrder
+import eu.codlab.cex.spot.trading.rust.bindings.NewOrderAnswer as RustNewOrderAnswer
 import eu.codlab.cex.spot.trading.rust.bindings.OrderRequest as RustOrderRequest
 import eu.codlab.cex.spot.trading.rust.bindings.OrderResult as RustOrderResult
 import eu.codlab.cex.spot.trading.rust.bindings.OrderSide as RustOrderSide
@@ -184,4 +188,50 @@ internal fun RustOrderResult.toKotlin() = OrderResult(
     lastUpdateTimestamp = lastUpdateTimestamp,
     expireTime = expireTime?.toLongOrNull(),
     effectiveTime = effectiveTime,
+)
+
+internal fun NewOrder.toRust() = RustNewOrder(
+    clientOrderId = clientOrderId,
+    accountId = accountId,
+    currency1 = currency1,
+    currency2 = currency2,
+    side = side.toRust(),
+    orderType = orderType.toRust(),
+    timestamp = timestamp,
+    comment = comment,
+    amountCcy1 = amountCcy1,
+    amountCcy2 = amountCcy2,
+    price = price,
+    expireTime = expireTime,
+    stopPrice = stopPrice,
+    timeInForce = timeInForce.toRust(),
+)
+
+internal fun RustNewOrderAnswer.toKotlin() = NewOrderAnswer(
+    clientId = clientId,
+    accountId = accountId,
+    orderId = orderId,
+    clientOrderId = clientOrderId,
+    status = status.toKotlin(),
+    currency1 = currency1,
+    currency2 = currency2,
+    side = side.toKotlin(),
+    orderType = orderType.toKotlin(),
+    timestamp = timestamp,
+    comment = comment,
+    orderRejectReason = orderRejectReason,
+    rejectCode = rejectCode,
+    rejectReason = rejectReason,
+    executedAmountCcy1 = executedAmountCcy1,
+    executedAmountCcy2 = executedAmountCcy2,
+    requestedAmountCcy1 = requestedAmountCcy1,
+    requestedAmountCcy2 = requestedAmountCcy2,
+    amountCcy2 = amountCcy2,
+    feeAmount = feeAmount,
+    feeCurrency = feeCurrency,
+    price = price,
+    averagePrice = averagePrice,
+    expireTime = expireTime?.toLongOrNull(),
+    effectiveTime = effectiveTime,
+    timeInForce = timeInForce?.toKotlin(),
 )

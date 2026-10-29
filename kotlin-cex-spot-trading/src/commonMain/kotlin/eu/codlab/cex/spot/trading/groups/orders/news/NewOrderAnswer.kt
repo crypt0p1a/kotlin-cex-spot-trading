@@ -21,7 +21,7 @@ data class NewOrderAnswer(
     /**
      * 255 chars max
      */
-    val comment: String,
+    val comment: String? = null,
     val orderRejectReason: String? = null,
     val rejectCode: Int? = null,
     val rejectReason: String? = null,
@@ -62,7 +62,7 @@ data class NewOrderAnswer(
     /**
      * String representation of the price
      */
-    val price: String,
+    val price: String? = null,
     /**
      * Represents average order execution price. If this value is null, then it means there is no
      * executed amount (order has no executions).

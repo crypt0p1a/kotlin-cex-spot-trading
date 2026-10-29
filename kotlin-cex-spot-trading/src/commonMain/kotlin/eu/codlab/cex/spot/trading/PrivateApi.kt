@@ -211,14 +211,8 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-new-order
      */
-    override suspend fun newOrder(
-        request: NewOrder
-    ) = call.call(
-        "do_my_new_order",
-        request,
-        NewOrder.serializer(),
-        NewOrderAnswer.serializer()
-    )
+    override suspend fun newOrder(request: NewOrder) =
+        rustCall { rust.newOrder(request.toRust()).toKotlin() }
 
     /**
      * Client can cancel orders.
