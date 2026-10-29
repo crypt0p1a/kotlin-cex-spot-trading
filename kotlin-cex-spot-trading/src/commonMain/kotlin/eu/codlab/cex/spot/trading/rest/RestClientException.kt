@@ -19,3 +19,10 @@ class RestClientPairException(
     statusCode: Int,
     val body: JsonElement
 ) : RestClientException(statusCode, body.toString())
+
+/**
+ * The request couldn't be sent or its answer couldn't be read: timeout, connection or TLS error...
+ */
+class RestClientTransportException(
+    message: String,
+) : Throwable(message)

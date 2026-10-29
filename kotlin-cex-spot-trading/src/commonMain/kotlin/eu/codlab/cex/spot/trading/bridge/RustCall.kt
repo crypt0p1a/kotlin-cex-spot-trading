@@ -2,6 +2,7 @@ package eu.codlab.cex.spot.trading.bridge
 
 import eu.codlab.cex.spot.trading.rest.RestClientNetworkException
 import eu.codlab.cex.spot.trading.rest.RestClientPairException
+import eu.codlab.cex.spot.trading.rest.RestClientTransportException
 import eu.codlab.cex.spot.trading.rust.bindings.CexException
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -9,8 +10,8 @@ import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Calls the Rust implementation, its errors are thrown as the ones of the Kotlin implementation:
- * [RestClientNetworkException], [RestClientPairException] and [SerializationException]. The
- * transport errors are thrown as [CexException.Transport]
+ * [RestClientNetworkException], [RestClientPairException], [RestClientTransportException] and
+ * [SerializationException]
  */
 @Suppress("SwallowedException")
 internal suspend fun <T> rustCall(block: suspend () -> T): T = try {
@@ -25,6 +26,8 @@ internal suspend fun <T> rustCall(block: suspend () -> T): T = try {
     }
 
     throw RestClientPairException(err.status.toInt(), body)
+} catch (err: CexException.Transport) {
+    throw RestClientTransportException(err.reason)
 } catch (err: CexException.Decode) {
     throw SerializationException(err.reason)
 }
