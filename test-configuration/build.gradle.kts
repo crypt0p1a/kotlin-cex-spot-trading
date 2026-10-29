@@ -3,7 +3,6 @@ import com.codingfeline.buildkonfig.compiler.FieldSpec
 plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.android.kotlin.multiplatform.library)
-    alias(additionals.plugins.kotlin.serialization)
     alias(additionals.plugins.multiplatform.buildkonfig)
     id("jvmCompat")
 }
@@ -27,20 +26,6 @@ kotlin {
     linuxArm64()
     linuxX64()
 
-    sourceSets {
-        commonMain {
-            dependencies {
-                implementation(additionals.kotlinx.serialization.json)
-            }
-        }
-        commonTest {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(additionals.kotlinx.coroutines.core)
-                implementation(additionals.kotlinx.coroutines.test)
-            }
-        }
-    }
 }
 
 buildkonfig {

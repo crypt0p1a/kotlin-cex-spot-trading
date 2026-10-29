@@ -37,7 +37,6 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(additionals.kotlinx.coroutines.core)
                 implementation(additionals.kotlinx.coroutines.test)
                 implementation(project(":test-configuration"))
             }

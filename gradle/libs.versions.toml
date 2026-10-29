@@ -1,5 +1,4 @@
 [versions]
-java = "21"
 korio = "4.0.10"
 kotlinx-cli = "0.3.6"
 

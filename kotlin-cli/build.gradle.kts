@@ -32,7 +32,6 @@ tasks.withType<Jar> {
 dependencies {
     api(project(":kotlin-cex-spot-trading"))
     implementation(additionals.kotlinx.coroutines.core)
-    implementation(additionals.kotlinx.coroutines.jvm)
     implementation(additionals.multiplatform.file.access)
     implementation(libs.kotlinx.cli)
 }
