@@ -241,18 +241,8 @@ class PrivateApi(
         rustCall { rust.transactionHistory(request.toRust()).map { it.toKotlin() } }
 
     override suspend fun fundsDepositFromWallet(request: DepositToOrWithdrawalFromWalletRequest) =
-        call.call(
-            "do_deposit_funds_from_wallet",
-            request,
-            DepositToOrWithdrawalFromWalletRequest.serializer(),
-            DepositToOrWithdrawFromWalletResult.serializer()
-        )
+        rustCall { rust.fundsDepositFromWallet(request.toRust()).toKotlin() }
 
     override suspend fun fundsWithdrawToWallet(request: DepositToOrWithdrawalFromWalletRequest) =
-        call.call(
-            "do_withdrawal_funds_to_wallet",
-            request,
-            DepositToOrWithdrawalFromWalletRequest.serializer(),
-            DepositToOrWithdrawFromWalletResult.serializer()
-        )
+        rustCall { rust.fundsWithdrawToWallet(request.toRust()).toKotlin() }
 }

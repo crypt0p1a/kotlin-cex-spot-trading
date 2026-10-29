@@ -9,6 +9,9 @@ import eu.codlab.cex.spot.trading.groups.account.fees.TradingFeeBalancesForAccou
 import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.fees.FeeVolume
 import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
+import eu.codlab.cex.spot.trading.groups.funds.ApprovalStatus
+import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawFromWalletResult
+import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawalFromWalletRequest
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistory
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistoryRequest
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionType
@@ -27,9 +30,12 @@ import eu.codlab.cex.spot.trading.models.TradingFees
 import eu.codlab.cex.spot.trading.rust.bindings.AccountBalance as RustAccountBalance
 import eu.codlab.cex.spot.trading.rust.bindings.AccountStatusRequest as RustAccountStatusRequest
 import eu.codlab.cex.spot.trading.rust.bindings.AccountStatusResult as RustAccountStatusResult
+import eu.codlab.cex.spot.trading.rust.bindings.ApprovalStatus as RustApprovalStatus
 import eu.codlab.cex.spot.trading.rust.bindings.BalanceForAccount as RustBalanceForAccount
 import eu.codlab.cex.spot.trading.rust.bindings.CancelOrder as RustCancelOrder
 import eu.codlab.cex.spot.trading.rust.bindings.CreateAccountResult as RustCreateAccountResult
+import eu.codlab.cex.spot.trading.rust.bindings.DepositToOrWithdrawFromWalletResult as RustDepositToOrWithdrawFromWalletResult
+import eu.codlab.cex.spot.trading.rust.bindings.DepositToOrWithdrawalFromWalletRequest as RustDepositToOrWithdrawalFromWalletRequest
 import eu.codlab.cex.spot.trading.rust.bindings.FeeStrategy as RustFeeStrategy
 import eu.codlab.cex.spot.trading.rust.bindings.FeeVolume as RustFeeVolume
 import eu.codlab.cex.spot.trading.rust.bindings.NewOrder as RustNewOrder
@@ -286,3 +292,25 @@ internal fun RustTransactionHistory.toKotlin() = TransactionHistory(
     details = details,
     currency = currency,
 )
+
+internal fun DepositToOrWithdrawalFromWalletRequest.toRust() =
+    RustDepositToOrWithdrawalFromWalletRequest(
+        clientTxId = clientTxId,
+        accountId = accountId,
+        currency = currency,
+        amount = amount,
+    )
+
+internal fun RustDepositToOrWithdrawFromWalletResult.toKotlin() =
+    DepositToOrWithdrawFromWalletResult(
+        clientTxId = clientTxId,
+        accountId = accountId,
+        currency = currency,
+        status = status.toKotlin(),
+    )
+
+internal fun RustApprovalStatus.toKotlin() = when (this) {
+    RustApprovalStatus.REJECTED -> ApprovalStatus.REJECTED
+    RustApprovalStatus.PENDING -> ApprovalStatus.PENDING
+    RustApprovalStatus.APPROVED -> ApprovalStatus.APPROVED
+}
