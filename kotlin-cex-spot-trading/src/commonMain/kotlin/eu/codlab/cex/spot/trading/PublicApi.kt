@@ -5,9 +5,7 @@ import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.calls.RestApiPublic
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
-import eu.codlab.cex.spot.trading.groups.processing.ProcessingInfo
 import eu.codlab.cex.spot.trading.groups.ticker.Ticker
-import eu.codlab.cex.spot.trading.models.Currencies
 import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.cex.spot.trading.rest.toRust
 import eu.codlab.cex.spot.trading.rust.PublicApi as RustPublicApi
@@ -127,13 +125,5 @@ class PublicApi(
      * https://trade.cex.io/docs/#rest-public-api-calls-processing-info
      */
     override suspend fun processingInfo(currencies: List<String>) =
-        call.call(
-            "/get_processing_info",
-            Currencies(currencies),
-            Currencies.serializer(),
-            MapSerializer(
-                String.serializer(),
-                ProcessingInfo.serializer()
-            )
-        )
+        rustCall { rust.processingInfo(currencies).mapValues { it.value.toKotlin() } }
 }
