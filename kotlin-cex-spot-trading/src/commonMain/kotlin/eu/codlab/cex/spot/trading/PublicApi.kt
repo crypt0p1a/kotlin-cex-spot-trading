@@ -1,6 +1,8 @@
 package eu.codlab.cex.spot.trading
 
 import eu.codlab.cex.spot.trading.calls.ApiConfiguration
+import eu.codlab.cex.spot.trading.bridge.rustCall
+import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.calls.RestApiPublic
 import eu.codlab.cex.spot.trading.groups.currency.CurrencyInfo
 import eu.codlab.cex.spot.trading.groups.pairsinfo.PairInfo
@@ -8,7 +10,6 @@ import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.processing.ProcessingInfo
 import eu.codlab.cex.spot.trading.groups.ticker.Ticker
 import eu.codlab.cex.spot.trading.models.Currencies
-import eu.codlab.cex.spot.trading.models.ServerTime
 import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.cex.spot.trading.rest.toRust
 import eu.codlab.cex.spot.trading.rust.PublicApi as RustPublicApi
@@ -58,7 +59,7 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-server-time
      */
-    override suspend fun serverTime() = call.call("/get_server_time", ServerTime.serializer())
+    override suspend fun serverTime() = rustCall { rust.serverTime().toKotlin() }
 
     /**
      * Pair Info method allows Client to receive the parameters for all supported trading pairs.

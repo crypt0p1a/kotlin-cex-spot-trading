@@ -14,6 +14,11 @@ class TestPublicApi {
     val api = PublicApi()
 
     @Test
+    fun testServerTime() = runTest {
+        println(api.serverTime())
+    }
+
+    @Test
     fun testCurrencyInfos() = runTest {
         println(api.currencyInfos())
     }
