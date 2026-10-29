@@ -221,16 +221,8 @@ class PrivateApi(
      *
      * Will throw in case of errors
      */
-    override suspend fun cancelOrder(
-        request: CancelOrder
-    ) {
-        call.call(
-            "do_cancel_my_order",
-            request,
-            CancelOrder.serializer(),
-            EmptyBody.serializer()
-        )
-    }
+    override suspend fun cancelOrder(request: CancelOrder) =
+        rustCall { rust.cancelOrder(request.toRust()) }
 
     /**
      * Client can cancel all open orders via REST API.

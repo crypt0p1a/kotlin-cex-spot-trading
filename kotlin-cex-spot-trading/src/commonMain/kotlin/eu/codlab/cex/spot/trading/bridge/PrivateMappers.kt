@@ -10,6 +10,7 @@ import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.fees.FeeVolume
 import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
 import eu.codlab.cex.spot.trading.groups.orders.OrderType
+import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
@@ -24,6 +25,7 @@ import eu.codlab.cex.spot.trading.rust.bindings.AccountBalance as RustAccountBal
 import eu.codlab.cex.spot.trading.rust.bindings.AccountStatusRequest as RustAccountStatusRequest
 import eu.codlab.cex.spot.trading.rust.bindings.AccountStatusResult as RustAccountStatusResult
 import eu.codlab.cex.spot.trading.rust.bindings.BalanceForAccount as RustBalanceForAccount
+import eu.codlab.cex.spot.trading.rust.bindings.CancelOrder as RustCancelOrder
 import eu.codlab.cex.spot.trading.rust.bindings.CreateAccountResult as RustCreateAccountResult
 import eu.codlab.cex.spot.trading.rust.bindings.FeeStrategy as RustFeeStrategy
 import eu.codlab.cex.spot.trading.rust.bindings.FeeVolume as RustFeeVolume
@@ -234,4 +236,11 @@ internal fun RustNewOrderAnswer.toKotlin() = NewOrderAnswer(
     expireTime = expireTime?.toLongOrNull(),
     effectiveTime = effectiveTime,
     timeInForce = timeInForce?.toKotlin(),
+)
+
+internal fun CancelOrder.toRust() = RustCancelOrder(
+    orderId = orderId,
+    clientOrderId = clientOrderId,
+    cancelRequestId = cancelRequestId,
+    timestamp = timestamp,
 )
