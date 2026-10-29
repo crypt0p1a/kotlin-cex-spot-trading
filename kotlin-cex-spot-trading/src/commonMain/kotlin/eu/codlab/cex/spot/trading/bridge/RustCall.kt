@@ -3,7 +3,6 @@ package eu.codlab.cex.spot.trading.bridge
 import eu.codlab.cex.spot.trading.rest.RestClientNetworkException
 import eu.codlab.cex.spot.trading.rest.RestClientPairException
 import eu.codlab.cex.spot.trading.rust.bindings.CexException
-import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
@@ -17,7 +16,7 @@ import kotlinx.serialization.json.JsonPrimitive
 internal suspend fun <T> rustCall(block: suspend () -> T): T = try {
     block()
 } catch (err: CexException.Network) {
-    throw RestClientNetworkException(HttpStatusCode.fromValue(err.status.toInt()), err.body)
+    throw RestClientNetworkException(err.status.toInt(), err.body)
 } catch (err: CexException.Api) {
     val body = try {
         Json.parseToJsonElement(err.body)
@@ -25,7 +24,7 @@ internal suspend fun <T> rustCall(block: suspend () -> T): T = try {
         JsonPrimitive(err.body)
     }
 
-    throw RestClientPairException(HttpStatusCode.fromValue(err.status.toInt()), body)
+    throw RestClientPairException(err.status.toInt(), body)
 } catch (err: CexException.Decode) {
     throw SerializationException(err.reason)
 }

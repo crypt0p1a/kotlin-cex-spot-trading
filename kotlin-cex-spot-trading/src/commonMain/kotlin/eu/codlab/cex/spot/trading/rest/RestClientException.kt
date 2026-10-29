@@ -1,19 +1,21 @@
 package eu.codlab.cex.spot.trading.rest
 
-import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.JsonElement
 
+/**
+ * [statusCode] is the HTTP status of the answer of CEX.IO
+ */
 sealed class RestClientException(
-    val statusCode: HttpStatusCode,
+    val statusCode: Int,
     message: String,
 ) : Throwable(message)
 
 class RestClientNetworkException(
-    statusCode: HttpStatusCode,
+    statusCode: Int,
     val body: String,
 ) : RestClientException(statusCode, body)
 
 class RestClientPairException(
-    statusCode: HttpStatusCode,
+    statusCode: Int,
     val body: JsonElement
 ) : RestClientException(statusCode, body.toString())
