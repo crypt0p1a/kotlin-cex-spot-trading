@@ -4,7 +4,6 @@ import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.calls.RestApiPublic
-import eu.codlab.cex.spot.trading.groups.currency.CurrencyInfo
 import eu.codlab.cex.spot.trading.groups.pairsinfo.PairInfo
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.processing.ProcessingInfo
@@ -90,12 +89,7 @@ class PublicApi(
      *
      * https://trade.cex.io/docs/#rest-public-api-calls-currencies-info
      */
-    override suspend fun currencyInfos() = call.call(
-        "get_currencies_info",
-        ListSerializer(
-            CurrencyInfo.serializer()
-        )
-    )
+    override suspend fun currencyInfos() = rustCall { rust.currencyInfos().map { it.toKotlin() } }
 
     /**
      * This request allows Client to receive detailed information about available options to make
