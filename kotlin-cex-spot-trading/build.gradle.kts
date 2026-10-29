@@ -16,16 +16,11 @@ kotlin {
 
     jvm()
 
-    js(IR) {
-        browser()
-    }
-
     iosX64()
     iosArm64()
     iosSimulatorArm64()
 
     macosArm64()
-    macosX64()
 
     mingwX64()
     linuxArm64()
