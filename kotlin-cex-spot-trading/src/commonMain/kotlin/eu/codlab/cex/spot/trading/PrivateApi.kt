@@ -5,26 +5,17 @@ import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.bridge.toRust
 import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.calls.RestApiSecret
-import eu.codlab.cex.spot.trading.groups.account.PrivateAccountApi
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
-import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawFromWalletResult
 import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawalFromWalletRequest
-import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistory
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistoryRequest
-import eu.codlab.cex.spot.trading.groups.orders.EmptyBody
 import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
-import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrders
 import eu.codlab.cex.spot.trading.groups.orders.news.NewOrder
-import eu.codlab.cex.spot.trading.groups.orders.news.NewOrderAnswer
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.volume.Volume
 import eu.codlab.cex.spot.trading.models.OrderRequest
-import eu.codlab.cex.spot.trading.models.OrderRequestInternal
-import eu.codlab.cex.spot.trading.models.OrderResult
 import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.cex.spot.trading.rest.toRust
 import eu.codlab.cex.spot.trading.rust.PrivateApi as RustPrivateApi
-import kotlinx.serialization.builtins.ListSerializer
 
 @Suppress("TooManyFunctions")
 class PrivateApi(
@@ -46,8 +37,6 @@ class PrivateApi(
         restOptions.toRust(),
         apiConfiguration.rust
     )
-
-    private val account = PrivateAccountApi(call)
 
     /**
      * This method indicates current fees at specific moment of time with consideration of Client'
