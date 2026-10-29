@@ -229,10 +229,7 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-cancel-all-orders
      */
-    override suspend fun cancelOrders() = call.call(
-        "do_cancel_all_orders",
-        CancelOrders.serializer()
-    ).clientOrderIds
+    override suspend fun cancelOrders() = rustCall { rust.cancelOrders() }
 
     /**
      * This request allows Client to find his financial transactions (deposits, withdrawals,
