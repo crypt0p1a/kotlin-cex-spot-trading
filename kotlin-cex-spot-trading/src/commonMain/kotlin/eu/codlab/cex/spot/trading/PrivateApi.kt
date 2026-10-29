@@ -69,7 +69,7 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-fee-strategy
      */
-    override suspend fun getFeeStrategy() = account.getFeeStrategy()
+    override suspend fun getFeeStrategy() = rustCall { rust.getFeeStrategy().toKotlin() }
 
     /**
      * This request allows Client to receive his trading volume for the last 30 days in USD equivalent.
