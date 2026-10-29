@@ -30,8 +30,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.http.client)
-                implementation(libs.crypto)
                 implementation(additionals.kotlinx.serialization.json)
             }
         }

@@ -19,9 +19,6 @@ repositories {
 
 application {
     mainClass.set(mainClassInManifest)
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 tasks.withType<Jar> {
