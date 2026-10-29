@@ -1,6 +1,7 @@
 package eu.codlab.cex.spot.trading.calls
 
 import eu.codlab.cex.spot.trading.utils.Queue
+import eu.codlab.cex.spot.trading.rust.RateLimitQueue as RustRateLimitQueue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -24,6 +25,12 @@ class RateLimitQueue(
     }
 
     private val queue = Queue(coroutineScope)
+
+    /**
+     * Rate limiter of the calls made by the Rust implementation. Until all the calls are migrated,
+     * its tokens are counted separately from this queue's
+     */
+    internal val rust = RustRateLimitQueue(apiTokenPoolMaximum, apiTokenCreationInterval, logger)
     private var count: UInt = apiTokenPoolMaximum
 
     init {

@@ -29,6 +29,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":kotlin-cex-spot-trading-rust"))
                 implementation(libs.http.client)
                 implementation(libs.crypto)
                 implementation(libs.korio.klock)

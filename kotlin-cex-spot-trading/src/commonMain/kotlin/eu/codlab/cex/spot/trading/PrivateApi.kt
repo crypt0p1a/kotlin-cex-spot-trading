@@ -19,6 +19,8 @@ import eu.codlab.cex.spot.trading.models.OrderRequest
 import eu.codlab.cex.spot.trading.models.OrderRequestInternal
 import eu.codlab.cex.spot.trading.models.OrderResult
 import eu.codlab.cex.spot.trading.rest.RestOptions
+import eu.codlab.cex.spot.trading.rest.toRust
+import eu.codlab.cex.spot.trading.rust.PrivateApi as RustPrivateApi
 import kotlinx.serialization.builtins.ListSerializer
 
 @Suppress("TooManyFunctions")
@@ -33,6 +35,13 @@ class PrivateApi(
         apiSecret,
         restOptions,
         apiConfiguration
+    )
+
+    override val rust = RustPrivateApi(
+        apiKey,
+        apiSecret,
+        restOptions.toRust(),
+        apiConfiguration.rust
     )
 
     private val account = PrivateAccountApi(call)

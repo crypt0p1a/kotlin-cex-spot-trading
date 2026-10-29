@@ -10,6 +10,8 @@ import eu.codlab.cex.spot.trading.groups.ticker.Ticker
 import eu.codlab.cex.spot.trading.models.Currencies
 import eu.codlab.cex.spot.trading.models.ServerTime
 import eu.codlab.cex.spot.trading.rest.RestOptions
+import eu.codlab.cex.spot.trading.rest.toRust
+import eu.codlab.cex.spot.trading.rust.PublicApi as RustPublicApi
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -22,6 +24,8 @@ class PublicApi(
         restOptions,
         apiConfiguration
     )
+
+    override val rust = RustPublicApi(restOptions.toRust(), apiConfiguration.rust)
 
     /**
      * This method is designed to obtain current information about Ticker, including data about

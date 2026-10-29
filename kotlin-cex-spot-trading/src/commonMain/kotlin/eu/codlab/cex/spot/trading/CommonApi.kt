@@ -10,6 +10,7 @@ import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequest
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import eu.codlab.cex.spot.trading.groups.orderbook.OrderBook
+import eu.codlab.cex.spot.trading.rust.ICommonApi as RustCommonApi
 import eu.codlab.cex.spot.trading.groups.orderbook.OrderBookRequest
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
@@ -18,6 +19,8 @@ import kotlinx.serialization.builtins.serializer
 
 sealed class CommonApi : ICommonApi {
     protected abstract val call: IRestApi
+
+    protected abstract val rust: RustCommonApi
 
     /**
      * This method allows Client to receive current order book snapshot for specific trading pair.
@@ -130,5 +133,8 @@ sealed class CommonApi : ICommonApi {
             TradeHistory.serializer()
         )
 
-    override fun shutdown() = call.close()
+    override fun shutdown() {
+        call.close()
+        rust.close()
+    }
 }
