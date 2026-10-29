@@ -5,6 +5,7 @@ plugins {
     alias(additionals.plugins.kotlin.multiplatform)
     alias(additionals.plugins.android.kotlin.multiplatform.library)
     alias(additionals.plugins.ubique.uniffi)
+    id("publication")
 }
 
 cargo {
