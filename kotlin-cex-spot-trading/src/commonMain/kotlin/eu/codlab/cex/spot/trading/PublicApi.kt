@@ -1,17 +1,12 @@
 package eu.codlab.cex.spot.trading
 
-import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
+import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.calls.RestApiPublic
-import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
-import eu.codlab.cex.spot.trading.groups.ticker.Ticker
 import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.cex.spot.trading.rest.toRust
 import eu.codlab.cex.spot.trading.rust.PublicApi as RustPublicApi
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 
 class PublicApi(
     restOptions: RestOptions = RestOptions(),
@@ -39,15 +34,7 @@ class PublicApi(
      * https://trade.cex.io/docs/#rest-public-api-calls-trade-history
      */
     override suspend fun tickers(pairs: List<String>) =
-        call.call(
-            "/get_ticker",
-            Pairs(pairs),
-            Pairs.serializer(),
-            MapSerializer(
-                String.serializer(),
-                Ticker.serializer()
-            )
-        )
+        rustCall { rust.tickers(pairs).mapValues { it.value.toKotlin() } }
 
     /**
      * This method is used to get the current time on Spot Trading server. It can be useful for

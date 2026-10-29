@@ -5,12 +5,14 @@ import eu.codlab.cex.spot.trading.groups.pairsinfo.PairInfo
 import eu.codlab.cex.spot.trading.groups.processing.Blockchain
 import eu.codlab.cex.spot.trading.groups.processing.Capability
 import eu.codlab.cex.spot.trading.groups.processing.ProcessingInfo
+import eu.codlab.cex.spot.trading.groups.ticker.Ticker
 import eu.codlab.cex.spot.trading.models.ServerTime
 import eu.codlab.cex.spot.trading.rust.bindings.Blockchain as RustBlockchain
 import eu.codlab.cex.spot.trading.rust.bindings.Capability as RustCapability
 import eu.codlab.cex.spot.trading.rust.bindings.CurrencyInfo as RustCurrencyInfo
 import eu.codlab.cex.spot.trading.rust.bindings.PairInfo as RustPairInfo
 import eu.codlab.cex.spot.trading.rust.bindings.ProcessingInfo as RustProcessingInfo
+import eu.codlab.cex.spot.trading.rust.bindings.Ticker as RustTicker
 import eu.codlab.cex.spot.trading.rust.bindings.ServerTime as RustServerTime
 
 internal fun RustServerTime.toKotlin() = ServerTime(
@@ -64,3 +66,24 @@ internal fun RustCapability.toKotlin() = when (this) {
     RustCapability.ENABLED -> Capability.Enabled
     RustCapability.DISABLED -> Capability.Disabled
 }
+
+internal fun RustTicker.toKotlin() = Ticker(
+    bestBid = bestBid,
+    bestAsk = bestAsk,
+    bestBidChange = bestBidChange,
+    bestBidChangePercentage = bestBidChangePercentage,
+    bestAskChange = bestAskChange,
+    bestAskChangePercentage = bestAskChangePercentage,
+    volume30d = volume30d,
+    low = low,
+    high = high,
+    volume = volume,
+    quoteVolume = quoteVolume,
+    lastTradeVolume = lastTradeVolume,
+    last = last,
+    lastTradePrice = lastTradePrice,
+    priceChange = priceChange,
+    priceChangePercentage = priceChangePercentage,
+    lastTradeDateISO = lastTradeDateIso,
+    volumeUSD = volumeUsd,
+)
