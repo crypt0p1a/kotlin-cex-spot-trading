@@ -1,11 +1,13 @@
 package eu.codlab.cex.spot.trading.bridge
 
+import eu.codlab.cex.spot.trading.groups.account.create.CreateAccountResult
 import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.fees.FeeVolume
 import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
 import eu.codlab.cex.spot.trading.groups.volume.Volume
 import eu.codlab.cex.spot.trading.models.TradingFee
 import eu.codlab.cex.spot.trading.models.TradingFees
+import eu.codlab.cex.spot.trading.rust.bindings.CreateAccountResult as RustCreateAccountResult
 import eu.codlab.cex.spot.trading.rust.bindings.FeeStrategy as RustFeeStrategy
 import eu.codlab.cex.spot.trading.rust.bindings.FeeVolume as RustFeeVolume
 import eu.codlab.cex.spot.trading.rust.bindings.StrategyConfig as RustStrategyConfig
@@ -38,4 +40,8 @@ internal fun RustVolume.toKotlin() = Volume(
     period = period,
     volume = volume,
     currency = currency,
+)
+
+internal fun RustCreateAccountResult.toKotlin() = CreateAccountResult(
+    accountId = accountId,
 )

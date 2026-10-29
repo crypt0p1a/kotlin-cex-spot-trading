@@ -93,7 +93,7 @@ class PrivateApi(
      * Wallet acount, from external crypto wallet etc.).
      */
     override suspend fun createAccount(accountId: String, currency: String) =
-        account.createAccount(accountId, currency)
+        rustCall { rust.createAccount(accountId, currency).toKotlin() }
 
     /**
      * By using Account Status V3 method, Client can find out current balance and it’s indicative
