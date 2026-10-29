@@ -1,5 +1,5 @@
 # Welcome to CEX.IO Spot Trading Library for Kotlin Multiplatform 👋
-![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)
 [![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://github.com/crypt0p1a/kotlin-cex-spot-trading#readme)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/crypt0p1a/kotlin-cex-spot-trading/graphs/commit-activity)
 [![License: GPLv3](https://img.shields.io/github/license/crypt0p1a/trade)](https://github.com/crypt0p1a/kotlin-cex-spot-trading/blob/master/LICENSE)
@@ -17,7 +17,7 @@
 
 ```
 [versions]
-cex = "0.0.1"
+cex = "1.0.0"
 
 
 [libraries]
@@ -27,7 +27,7 @@ cex = { module = "eu.codlab:kotlin-cex-spot-trading", version.ref = "cex" }
 **Old gradle**
 
 ```
-implementation("eu.codlab:kotlin-cex-spot-trading:0.0.1")
+implementation("eu.codlab:kotlin-cex-spot-trading:1.0.0")
 ```
 
 ### Locally for dev
