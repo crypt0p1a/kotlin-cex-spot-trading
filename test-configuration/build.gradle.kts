@@ -62,7 +62,7 @@ buildkonfig {
             buildConfigField(
                 FieldSpec.Type.STRING,
                 it,
-                rootProject.extra[it] as String,
+                rootProject.extra[it] as String? ?: "",
                 nullable = false,
                 const = true
             )
