@@ -4,16 +4,27 @@ import eu.codlab.cex.spot.trading.groups.candles.Candle
 import eu.codlab.cex.spot.trading.groups.candles.CandleResolution
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPairs
+import eu.codlab.cex.spot.trading.groups.history.trades.OrderTypeHistory
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeFromHistory
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistory
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
+import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import eu.codlab.cex.spot.trading.groups.orderbook.OrderBook
 import eu.codlab.cex.spot.trading.groups.orderbook.PriceAmount
+import eu.codlab.cex.spot.trading.groups.orders.OrderSide
 import eu.codlab.cex.spot.trading.models.DataType
 import eu.codlab.cex.spot.trading.rust.bindings.Candle as RustCandle
 import eu.codlab.cex.spot.trading.rust.bindings.CandleResolution as RustCandleResolution
 import eu.codlab.cex.spot.trading.rust.bindings.CandlesFromPair as RustCandlesFromPair
 import eu.codlab.cex.spot.trading.rust.bindings.CandlesFromPairs as RustCandlesFromPairs
 import eu.codlab.cex.spot.trading.rust.bindings.DataType as RustDataType
+import eu.codlab.cex.spot.trading.rust.bindings.OrderSide as RustOrderSide
 import eu.codlab.cex.spot.trading.rust.bindings.OrderBook as RustOrderBook
 import eu.codlab.cex.spot.trading.rust.bindings.PriceAmount as RustPriceAmount
+import eu.codlab.cex.spot.trading.rust.bindings.TradeFromHistory as RustTradeFromHistory
+import eu.codlab.cex.spot.trading.rust.bindings.TradeHistory as RustTradeHistory
+import eu.codlab.cex.spot.trading.rust.bindings.TradeHistoryRequestWithDate as RustTradeHistoryRequestWithDate
+import eu.codlab.cex.spot.trading.rust.bindings.TradeHistoryRequestWithTrade as RustTradeHistoryRequestWithTrade
 
 internal fun RustOrderBook.toKotlin() = OrderBook(
     timestamp = timestamp,
@@ -82,4 +93,46 @@ internal fun RustCandle.toKotlin() = Candle(
     resolution = resolution.toKotlin(),
     isClosed = isClosed,
     timestampISO = timestampIso,
+)
+
+internal fun OrderSide.toRust() = when (this) {
+    OrderSide.Buy -> RustOrderSide.BUY
+    OrderSide.Sell -> RustOrderSide.SELL
+}
+
+internal fun RustOrderSide.toKotlin() = when (this) {
+    RustOrderSide.BUY -> OrderSide.Buy
+    RustOrderSide.SELL -> OrderSide.Sell
+}
+
+internal fun TradeHistoryRequestWithTrade.toRust() = RustTradeHistoryRequestWithTrade(
+    pair = pair,
+    side = side?.toRust(),
+    fromTradeId = fromTradeId,
+    toTradeId = toTradeId,
+    pageSize = pageSize,
+)
+
+internal fun TradeHistoryRequestWithDate.toRust() = RustTradeHistoryRequestWithDate(
+    pair = pair,
+    side = side?.toRust(),
+    fromDateIso = fromDateISO,
+    toDateIso = toDateISO,
+    pageSize = pageSize,
+)
+
+internal fun RustTradeHistory.toKotlin() = TradeHistory(
+    pageSize = pageSize,
+    trades = trades.map { it.toKotlin() },
+)
+
+internal fun RustTradeFromHistory.toKotlin() = TradeFromHistory(
+    side = when (side) {
+        RustOrderSide.BUY -> OrderTypeHistory.Buy
+        RustOrderSide.SELL -> OrderTypeHistory.Sell
+    },
+    dateISO = dateIso,
+    price = price,
+    amount = amount,
+    tradeId = tradeId,
 )

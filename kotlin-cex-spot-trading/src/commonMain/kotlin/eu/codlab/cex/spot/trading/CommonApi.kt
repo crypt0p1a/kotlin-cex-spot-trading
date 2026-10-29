@@ -6,8 +6,6 @@ import eu.codlab.cex.spot.trading.bridge.toRust
 import eu.codlab.cex.spot.trading.calls.IRestApi
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPairs
-import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistory
-import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequest
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import eu.codlab.cex.spot.trading.rust.ICommonApi as RustCommonApi
@@ -65,12 +63,7 @@ sealed class CommonApi : ICommonApi {
      * https://trade.cex.io/docs/#rest-private-api-calls-trade-history
      */
     override suspend fun tradeHistory(request: TradeHistoryRequestWithTrade) =
-        call.call(
-            "get_trade_history",
-            request.to(),
-            TradeHistoryRequest.serializer(),
-            TradeHistory.serializer()
-        )
+        rustCall { rust.tradeHistory(request.toRust()).toKotlin() }
 
     /**
      * This method allows Client to obtain historical data as to occurred trades upon requested
@@ -83,12 +76,7 @@ sealed class CommonApi : ICommonApi {
      * https://trade.cex.io/docs/#rest-private-api-calls-trade-history
      */
     override suspend fun tradeHistory(request: TradeHistoryRequestWithDate) =
-        call.call(
-            "get_trade_history",
-            request.to(),
-            TradeHistoryRequest.serializer(),
-            TradeHistory.serializer()
-        )
+        rustCall { rust.tradeHistory(request.toRust()).toKotlin() }
 
     override fun shutdown() {
         call.close()
