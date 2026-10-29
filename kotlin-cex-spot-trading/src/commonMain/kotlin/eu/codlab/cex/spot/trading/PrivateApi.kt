@@ -111,7 +111,7 @@ class PrivateApi(
      * https://trade.cex.io/docs/#rest-private-api-calls-account-status-v3
      */
     override suspend fun getMyAccountStatus(request: AccountStatusRequest) =
-        account.getMyAccountStatus(request)
+        rustCall { rust.getMyAccountStatus(request.toRust()).toKotlin() }
 
     /**
      * This request allows Client to receive his CEX.IO Wallet balances, which can be useful for
