@@ -84,35 +84,6 @@ data class OrderRequest(
      */
     val serverCreateTimestampTo: Long? = null,
     // TODO : add serverCreate
-) {
-    internal fun to() = OrderRequestInternal(
-        orderId = orderId,
-        archived = archived,
-        pair = pair,
-        side = side,
-        accountIds = accountIds,
-        sortOrder = sortOrder,
-        pageSize = pageSize,
-        pageNumber = pageNumber,
-        serverCreateTimestampFrom = serverCreateTimestampFrom,
-        serverCreateTimestampTo = serverCreateTimestampTo,
-    )
-}
-
-@Serializable
-internal data class OrderRequestInternal(
-    val clientOrderId: String? = null,
-    val orderId: String? = null,
-    val archived: Boolean? = null,
-    val pair: String? = null,
-    val side: String? = null,
-    val accountIds: List<String>? = null,
-    // TODO add serverCreate
-    val sortOrder: Order = Order.Desc,
-    val pageSize: Int? = null,
-    val pageNumber: Int? = null,
-    val serverCreateTimestampTo: Long? = null,
-    val serverCreateTimestampFrom: Long? = null,
 )
 
 @Serializable

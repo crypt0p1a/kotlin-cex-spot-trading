@@ -37,15 +37,7 @@ data class TradeHistoryRequestWithTrade(
      * specified in request, then by default 100 trades would be returned in response.
      */
     val pageSize: Int? = null
-) {
-    internal fun to() = TradeHistoryRequest(
-        pair = pair,
-        side = side,
-        fromTradeId = fromTradeId,
-        toTradeId = toTradeId,
-        pageSize = pageSize
-    )
-}
+)
 
 @Serializable
 data class TradeHistoryRequestWithDate(
@@ -80,25 +72,6 @@ data class TradeHistoryRequestWithDate(
      * 1000, the response will still contain only up to 1000 trades max. If this field is not
      * specified in request, then by default 100 trades would be returned in response.
      */
-    val pageSize: Int? = null
-) {
-    internal fun to() = TradeHistoryRequest(
-        pair = pair,
-        side = side,
-        fromDateISO = fromDateISO,
-        toDateISO = toDateISO,
-        pageSize = pageSize
-    )
-}
-
-@Serializable
-internal data class TradeHistoryRequest(
-    val pair: String,
-    val side: OrderSide? = null,
-    val fromDateISO: String? = null,
-    val toDateISO: String? = null,
-    val fromTradeId: String? = null,
-    val toTradeId: String? = null,
     val pageSize: Int? = null
 )
 

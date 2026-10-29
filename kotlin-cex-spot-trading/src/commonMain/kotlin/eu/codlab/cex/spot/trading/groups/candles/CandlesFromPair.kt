@@ -55,13 +55,4 @@ data class CandlesFromPair(
      * - “1d”.
      */
     val resolution: CandleResolution
-) : Candles() {
-    override fun toGetCandles() = GetCandles(
-        pair = pair,
-        fromISO = fromISO?.unixMillisLong,
-        toISO = toISO?.unixMillisLong,
-        limit = limit,
-        dataType = dataType,
-        resolution = resolution
-    )
-}
+)
