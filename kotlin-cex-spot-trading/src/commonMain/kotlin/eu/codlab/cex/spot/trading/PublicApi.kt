@@ -4,7 +4,6 @@ import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.calls.RestApiPublic
-import eu.codlab.cex.spot.trading.groups.pairsinfo.PairInfo
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.groups.processing.ProcessingInfo
 import eu.codlab.cex.spot.trading.groups.ticker.Ticker
@@ -73,14 +72,7 @@ class PublicApi(
      * https://trade.cex.io/docs/#rest-public-api-calls-pairs-info
      */
     override suspend fun pairsInfo(pairs: List<String>) =
-        call.call(
-            "/get_pairs_info",
-            Pairs(pairs),
-            Pairs.serializer(),
-            ListSerializer(
-                PairInfo.serializer()
-            )
-        )
+        rustCall { rust.pairsInfo(pairs).map { it.toKotlin() } }
 
     /**
      * Currencies Info method allows Client to receive the parameters for all currencies configured
