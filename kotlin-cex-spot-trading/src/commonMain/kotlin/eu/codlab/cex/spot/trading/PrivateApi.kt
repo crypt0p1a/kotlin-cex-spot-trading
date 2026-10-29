@@ -121,7 +121,8 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-wallet-balance
      */
-    override suspend fun accountBalance() = account.accountBalance()
+    override suspend fun accountBalance() =
+        rustCall { rust.accountBalance().mapValues { it.value.toKotlin() } }
 
     /**
      * This request allows Client to find out info about his orders.

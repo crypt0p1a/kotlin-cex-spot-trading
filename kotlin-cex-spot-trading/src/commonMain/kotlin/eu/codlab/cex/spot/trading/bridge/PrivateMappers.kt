@@ -1,5 +1,6 @@
 package eu.codlab.cex.spot.trading.bridge
 
+import eu.codlab.cex.spot.trading.groups.account.balance.AccountBalance
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusResult
 import eu.codlab.cex.spot.trading.groups.account.balance.BalanceForAccount
@@ -11,6 +12,7 @@ import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
 import eu.codlab.cex.spot.trading.groups.volume.Volume
 import eu.codlab.cex.spot.trading.models.TradingFee
 import eu.codlab.cex.spot.trading.models.TradingFees
+import eu.codlab.cex.spot.trading.rust.bindings.AccountBalance as RustAccountBalance
 import eu.codlab.cex.spot.trading.rust.bindings.AccountStatusRequest as RustAccountStatusRequest
 import eu.codlab.cex.spot.trading.rust.bindings.AccountStatusResult as RustAccountStatusResult
 import eu.codlab.cex.spot.trading.rust.bindings.BalanceForAccount as RustBalanceForAccount
@@ -78,4 +80,8 @@ internal fun RustBalanceForAccount.toKotlin() = BalanceForAccount(
 internal fun RustTradingFeeBalancesForAccount.toKotlin() = TradingFeeBalancesForAccount(
     balance = balance,
     expirationDate = expirationDate,
+)
+
+internal fun RustAccountBalance.toKotlin() = AccountBalance(
+    balance = balance,
 )
