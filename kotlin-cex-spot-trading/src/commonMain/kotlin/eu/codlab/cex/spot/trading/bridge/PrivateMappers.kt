@@ -9,7 +9,13 @@ import eu.codlab.cex.spot.trading.groups.account.fees.TradingFeeBalancesForAccou
 import eu.codlab.cex.spot.trading.groups.fees.FeeStrategy
 import eu.codlab.cex.spot.trading.groups.fees.FeeVolume
 import eu.codlab.cex.spot.trading.groups.fees.StrategyConfig
+import eu.codlab.cex.spot.trading.groups.orders.OrderType
+import eu.codlab.cex.spot.trading.groups.orders.news.TimeInForce
 import eu.codlab.cex.spot.trading.groups.volume.Volume
+import eu.codlab.cex.spot.trading.models.Order
+import eu.codlab.cex.spot.trading.models.OrderRequest
+import eu.codlab.cex.spot.trading.models.OrderResult
+import eu.codlab.cex.spot.trading.models.OrderStatus
 import eu.codlab.cex.spot.trading.models.TradingFee
 import eu.codlab.cex.spot.trading.models.TradingFees
 import eu.codlab.cex.spot.trading.rust.bindings.AccountBalance as RustAccountBalance
@@ -19,7 +25,14 @@ import eu.codlab.cex.spot.trading.rust.bindings.BalanceForAccount as RustBalance
 import eu.codlab.cex.spot.trading.rust.bindings.CreateAccountResult as RustCreateAccountResult
 import eu.codlab.cex.spot.trading.rust.bindings.FeeStrategy as RustFeeStrategy
 import eu.codlab.cex.spot.trading.rust.bindings.FeeVolume as RustFeeVolume
+import eu.codlab.cex.spot.trading.rust.bindings.OrderRequest as RustOrderRequest
+import eu.codlab.cex.spot.trading.rust.bindings.OrderResult as RustOrderResult
+import eu.codlab.cex.spot.trading.rust.bindings.OrderSide as RustOrderSide
+import eu.codlab.cex.spot.trading.rust.bindings.OrderStatus as RustOrderStatus
+import eu.codlab.cex.spot.trading.rust.bindings.OrderType as RustOrderType
+import eu.codlab.cex.spot.trading.rust.bindings.SortOrder as RustSortOrder
 import eu.codlab.cex.spot.trading.rust.bindings.StrategyConfig as RustStrategyConfig
+import eu.codlab.cex.spot.trading.rust.bindings.TimeInForce as RustTimeInForce
 import eu.codlab.cex.spot.trading.rust.bindings.TradingFee as RustTradingFee
 import eu.codlab.cex.spot.trading.rust.bindings.TradingFeeBalancesForAccount as RustTradingFeeBalancesForAccount
 import eu.codlab.cex.spot.trading.rust.bindings.TradingFees as RustTradingFees
@@ -84,4 +97,91 @@ internal fun RustTradingFeeBalancesForAccount.toKotlin() = TradingFeeBalancesFor
 
 internal fun RustAccountBalance.toKotlin() = AccountBalance(
     balance = balance,
+)
+
+internal fun OrderRequest.toRust() = RustOrderRequest(
+    clientOrderId = clientOrderId,
+    orderId = orderId,
+    archived = archived,
+    pair = pair,
+    side = side?.let { side ->
+        RustOrderSide.entries.find { it.name.equals(side, ignoreCase = true) }
+            ?: throw IllegalArgumentException("Unknown order side $side, expected BUY or SELL")
+    },
+    accountIds = accountIds,
+    sortOrder = sortOrder.toRust(),
+    pageSize = pageSize,
+    pageNumber = pageNumber,
+    serverCreateTimestampFrom = serverCreateTimestampFrom,
+    serverCreateTimestampTo = serverCreateTimestampTo,
+)
+
+internal fun Order.toRust() = when (this) {
+    Order.Desc -> RustSortOrder.DESC
+    Order.Asc -> RustSortOrder.ASC
+}
+
+internal fun RustOrderStatus.toKotlin() = when (this) {
+    RustOrderStatus.PENDING_NEW -> OrderStatus.PENDING_NEW
+    RustOrderStatus.NEW -> OrderStatus.NEW
+    RustOrderStatus.PARTIALLY_FILLED -> OrderStatus.PARTIALLY_FILLED
+    RustOrderStatus.FILLED -> OrderStatus.FILLED
+    RustOrderStatus.EXPIRED -> OrderStatus.EXPIRED
+    RustOrderStatus.REJECTED -> OrderStatus.REJECTED
+    RustOrderStatus.PENDING_CANCEL -> OrderStatus.PENDING_CANCEL
+    RustOrderStatus.CANCELLED -> OrderStatus.CANCELLED
+}
+
+internal fun OrderType.toRust() = when (this) {
+    OrderType.Limit -> RustOrderType.LIMIT
+    OrderType.Market -> RustOrderType.MARKET
+}
+
+internal fun RustOrderType.toKotlin() = when (this) {
+    RustOrderType.LIMIT -> OrderType.Limit
+    RustOrderType.MARKET -> OrderType.Market
+}
+
+internal fun TimeInForce.toRust() = when (this) {
+    TimeInForce.GTC -> RustTimeInForce.GTC
+    TimeInForce.IOC -> RustTimeInForce.IOC
+    TimeInForce.GTD -> RustTimeInForce.GTD
+}
+
+internal fun RustTimeInForce.toKotlin() = when (this) {
+    RustTimeInForce.GTC -> TimeInForce.GTC
+    RustTimeInForce.IOC -> TimeInForce.IOC
+    RustTimeInForce.GTD -> TimeInForce.GTD
+}
+
+internal fun RustOrderResult.toKotlin() = OrderResult(
+    orderId = orderId,
+    clientOrderId = clientOrderId,
+    clientId = clientId,
+    accountId = accountId,
+    status = status.toKotlin(),
+    statusIsFinal = statusIsFinal,
+    currency1 = currency1,
+    currency2 = currency2,
+    side = side.toKotlin(),
+    orderType = orderType.toKotlin(),
+    timeInForce = timeInForce?.toKotlin(),
+    comment = comment,
+    rejectCode = rejectCode,
+    rejectReason = rejectReason,
+    executedAmountCcy1 = executedAmountCcy1,
+    executedAmountCcy2 = executedAmountCcy2,
+    requestedAmountCcy1 = requestedAmountCcy1,
+    requestedAmountCcy2 = requestedAmountCcy2,
+    initialOnHoldAmountCcy1 = initialOnHoldAmountCcy1,
+    initialOnHoldAmountCcy2 = initialOnHoldAmountCcy2,
+    feeAmount = feeAmount,
+    feeCurrency = feeCurrency,
+    price = price,
+    averagePrice = averagePrice,
+    clientCreateTimestamp = clientCreateTimestamp,
+    serverCreateTimestamp = serverCreateTimestamp,
+    lastUpdateTimestamp = lastUpdateTimestamp,
+    expireTime = expireTime?.toLongOrNull(),
+    effectiveTime = effectiveTime,
 )

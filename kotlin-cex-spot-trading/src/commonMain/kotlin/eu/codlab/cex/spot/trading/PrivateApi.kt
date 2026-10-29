@@ -133,12 +133,8 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders(request: OrderRequest) = call.call(
-        "get_my_orders",
-        request.to(),
-        OrderRequestInternal.serializer(),
-        ListSerializer(OrderResult.serializer())
-    )
+    override suspend fun orders(request: OrderRequest) =
+        rustCall { rust.orders(request.toRust()).map { it.toKotlin() } }
 
     /**
      * This request allows Client to find out info about his orders.
@@ -149,11 +145,8 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders(orderId: String) = orders(
-        OrderRequest(
-            orderId = orderId
-        )
-    ).find { it.orderId == orderId }
+    override suspend fun orders(orderId: String) =
+        rustCall { rust.orders(orderId)?.toKotlin() }
 
     /**
      * This request allows Client to find out info about his orders.
@@ -175,11 +168,8 @@ class PrivateApi(
      * array with all orders’ details in which requested clientOrderId has been indicated by the
      * Client.
      */
-    override suspend fun orders(symbols: Pair<String, String>) = orders(
-        OrderRequest(
-            pair = "${symbols.first}-${symbols.second}"
-        )
-    )
+    override suspend fun orders(symbols: Pair<String, String>) =
+        rustCall { rust.orders(symbols).map { it.toKotlin() } }
 
     /**
      * This method works only with CEX.IO Spot Trading sub-accounts.
