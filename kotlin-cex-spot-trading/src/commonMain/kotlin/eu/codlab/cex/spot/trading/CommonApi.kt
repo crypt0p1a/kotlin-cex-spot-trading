@@ -3,7 +3,6 @@ package eu.codlab.cex.spot.trading
 import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.bridge.toRust
-import eu.codlab.cex.spot.trading.calls.IRestApi
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPairs
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
@@ -11,8 +10,6 @@ import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithT
 import eu.codlab.cex.spot.trading.rust.ICommonApi as RustCommonApi
 
 sealed class CommonApi : ICommonApi {
-    protected abstract val call: IRestApi
-
     protected abstract val rust: RustCommonApi
 
     /**
@@ -78,8 +75,5 @@ sealed class CommonApi : ICommonApi {
     override suspend fun tradeHistory(request: TradeHistoryRequestWithDate) =
         rustCall { rust.tradeHistory(request.toRust()).toKotlin() }
 
-    override fun shutdown() {
-        call.close()
-        rust.close()
-    }
+    override fun shutdown() = rust.close()
 }

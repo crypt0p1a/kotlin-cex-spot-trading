@@ -3,7 +3,6 @@ package eu.codlab.cex.spot.trading
 import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.calls.ApiConfiguration
-import eu.codlab.cex.spot.trading.calls.RestApiPublic
 import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.cex.spot.trading.rest.toRust
 import eu.codlab.cex.spot.trading.rust.PublicApi as RustPublicApi
@@ -12,11 +11,6 @@ class PublicApi(
     restOptions: RestOptions = RestOptions(),
     apiConfiguration: ApiConfiguration = ApiConfiguration(),
 ) : CommonApi(), IPublicApi {
-    override val call = RestApiPublic(
-        restOptions,
-        apiConfiguration
-    )
-
     override val rust = RustPublicApi(restOptions.toRust(), apiConfiguration.rust)
 
     /**

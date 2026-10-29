@@ -4,7 +4,6 @@ import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.bridge.toRust
 import eu.codlab.cex.spot.trading.calls.ApiConfiguration
-import eu.codlab.cex.spot.trading.calls.RestApiSecret
 import eu.codlab.cex.spot.trading.groups.account.balance.AccountStatusRequest
 import eu.codlab.cex.spot.trading.groups.funds.DepositToOrWithdrawalFromWalletRequest
 import eu.codlab.cex.spot.trading.groups.history.transactions.TransactionHistoryRequest
@@ -24,13 +23,6 @@ class PrivateApi(
     restOptions: RestOptions = RestOptions(),
     apiConfiguration: ApiConfiguration = ApiConfiguration(),
 ) : CommonApi(), IPrivateApi {
-    override val call = RestApiSecret(
-        apiKey,
-        apiSecret,
-        restOptions,
-        apiConfiguration
-    )
-
     override val rust = RustPrivateApi(
         apiKey,
         apiSecret,
