@@ -76,10 +76,7 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-volume
      */
-    override suspend fun getMyVolume() = call.call(
-        "get_my_volume",
-        Volume.serializer()
-    )
+    override suspend fun getMyVolume() = rustCall { rust.getMyVolume().toKotlin() }
 
     /**
      * This request allows Client to create new sub-account.
