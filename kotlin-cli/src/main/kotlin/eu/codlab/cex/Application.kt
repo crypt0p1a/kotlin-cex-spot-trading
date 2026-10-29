@@ -1,7 +1,6 @@
 package eu.codlab.cex
 
 import eu.codlab.cex.spot.trading.PrivateApi
-import eu.codlab.cex.spot.trading.rest.RestOptions
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.ExperimentalCli
@@ -18,7 +17,6 @@ fun main(args: Array<String>) {
     val api = PrivateApi(
         config.get("cexApiKey")!!,
         config.get("cexApiSecret")!!,
-        RestOptions(enableLogs = true)
     )
 
     val parser = ArgParser("CEX")

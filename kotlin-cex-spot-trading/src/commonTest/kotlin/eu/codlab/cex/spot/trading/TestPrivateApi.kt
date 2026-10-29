@@ -11,7 +11,6 @@ import eu.codlab.cex.spot.trading.groups.orders.OrderSide
 import eu.codlab.cex.spot.trading.groups.orders.cancel.CancelOrder
 import eu.codlab.cex.spot.trading.groups.pairsinfo.Pairs
 import eu.codlab.cex.spot.trading.models.DataType
-import eu.codlab.cex.spot.trading.rest.RestOptions
 import eu.codlab.configuration.Configuration
 import korlibs.time.DateTime
 import korlibs.time.hours
@@ -22,7 +21,6 @@ class TestPrivateApi {
     val api = PrivateApi(
         Configuration.apiKey,
         Configuration.apiSecret,
-        RestOptions(enableLogs = true)
     )
 
     /**
