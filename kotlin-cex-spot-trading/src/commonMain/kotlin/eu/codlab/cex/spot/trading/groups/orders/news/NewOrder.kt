@@ -57,7 +57,7 @@ data class NewOrder(
      * Represents order price. Please omit this field for orders, where price cannot be requested,
      * for example, Market orders or Stop orders.
      */
-    val price: String,
+    val price: String? = null,
     /**
      * UTC timestamp in format YYYYMMDD-HH:mm:ss.SSS. If Expire Time is in the past, order will be rejected.
      */
