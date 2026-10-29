@@ -21,3 +21,8 @@ sha2 = "0.10.9"
 thiserror = "2.0.18"
 tokio = { version = "1", default-features = false }
 uniffi = "=0.32.0"
+
+[profile.release]
+# rustc strips the macOS dylibs with its rust-objcopy (LLVM), whose output is rejected by dlopen:
+# "mis-aligned LINKEDIT string pool". Apple's strip doesn't have the issue
+strip = false
