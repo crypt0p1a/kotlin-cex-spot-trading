@@ -10,7 +10,7 @@ import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithT
 import eu.codlab.cex.spot.trading.rust.ICommonApi as RustCommonApi
 
 sealed class CommonApi : ICommonApi {
-    protected abstract val rust: RustCommonApi
+    internal abstract val rust: RustCommonApi
 
     /**
      * This method allows Client to receive current order book snapshot for specific trading pair.
