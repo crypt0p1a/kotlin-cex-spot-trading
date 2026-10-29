@@ -49,11 +49,24 @@ val publicInstance = PublicApi()
 
 Both will expose the endpoints documented in the [cex's documentation](https://trade.cex.io/docs/#rest)
 
+Share an `ApiConfiguration` between the instances: its `RateLimitQueue` limits the calls made to
+CEX.IO. Call `shutdown()` to release an instance.
 
-### Rust implementation
+The errors are thrown as `RestClientNetworkException` (HTTP status other than 200),
+`RestClientPairException` (error answered by CEX.IO), `RestClientTransportException` (request not
+sent or answer not read) or `SerializationException` (unexpected answer).
 
-The `kotlin-cex-spot-trading-rust` module holds a Rust implementation of the same API, exported to
-Kotlin Multiplatform with UniFFI. See [its README](kotlin-cex-spot-trading-rust/README.md).
+### Platforms
+
+`jvm`, `android`, `iosX64`, `iosArm64`, `iosSimulatorArm64`, `macosArm64`, `mingwX64`,
+`linuxArm64`, `linuxX64`.
+
+### Implementation
+
+The calls are made by the Rust crate of the `kotlin-cex-spot-trading-rust` module, exported to
+Kotlin Multiplatform with UniFFI: the library converts its models from and to the generated ones,
+which stay internal. See [its README](kotlin-cex-spot-trading-rust/README.md) for the build
+requirements.
 
 ## Build
 

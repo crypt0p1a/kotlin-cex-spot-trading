@@ -60,14 +60,20 @@ cargo test -- --include-ignored  # + calls to the real CEX.IO API
 
 The Rust library is built in debug unless `-PreleaseBuild=true` is given to Gradle.
 
-## Differences with the Kotlin library
+## Differences with the former Kotlin implementation
+
+`kotlin-cex-spot-trading` calls this crate, which changed the behaviour of its calls:
 
 - `Ticker`: every field is optional, CEX.IO currently only sends bestBid, bestAsk, last, volume,
-  volumeUSD and priceChangePercentage (the Kotlin model fails to decode it)
+  volumeUSD and priceChangePercentage
 - empty pair / currency lists are omitted (CEX.IO rejects `"pairs": []`), so `pairsInfo()` returns
   all the pairs
-- `OrderRequest.clientOrderId` is sent (dropped by the Kotlin library), `side` is an `OrderSide`
+- `OrderRequest.clientOrderId` is sent
 - the leading `/` of the actions is removed, from the URL and from the signed message
-- `NewOrder.price` is optional (market orders), `OrderResult.expireTime` is a string
+- `NewOrder.price` is optional (market orders)
+
+The generated models differ from the ones of `kotlin-cex-spot-trading`, which converts them:
+
+- `side` of `OrderRequest` is an `OrderSide`, `OrderResult.expireTime` is a string
 - dates are UTC milliseconds (`fromMs`, `toMs`) instead of klock `DateTime`
 - `Blockchain.type` is `blockchainType`, `StrategyConfig.default` is `defaultFees`

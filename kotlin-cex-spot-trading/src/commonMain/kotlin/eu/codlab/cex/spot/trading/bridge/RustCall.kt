@@ -9,7 +9,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 
 /**
- * Calls the Rust implementation, its errors are thrown as the ones of the Kotlin implementation:
+ * Calls the Rust implementation, its errors are thrown as the exceptions of this library:
  * [RestClientNetworkException], [RestClientPairException], [RestClientTransportException] and
  * [SerializationException]
  */
