@@ -1,5 +1,7 @@
 package eu.codlab.cex.spot.trading
 
+import eu.codlab.cex.spot.trading.bridge.rustCall
+import eu.codlab.cex.spot.trading.bridge.toKotlin
 import eu.codlab.cex.spot.trading.calls.IRestApi
 import eu.codlab.cex.spot.trading.groups.candles.Candle
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
@@ -9,9 +11,7 @@ import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistory
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequest
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
-import eu.codlab.cex.spot.trading.groups.orderbook.OrderBook
 import eu.codlab.cex.spot.trading.rust.ICommonApi as RustCommonApi
-import eu.codlab.cex.spot.trading.groups.orderbook.OrderBookRequest
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -29,12 +29,7 @@ sealed class CommonApi : ICommonApi {
      * https://trade.cex.io/docs/#rest-private-api-calls-order-book
      */
     override suspend fun orderBook(currency1: String, currency2: String) =
-        call.call(
-            "/get_order_book",
-            OrderBookRequest("$currency1-$currency2"),
-            OrderBookRequest.serializer(),
-            OrderBook.serializer()
-        )
+        rustCall { rust.orderBook(currency1, currency2).toKotlin() }
 
     /**
      * By using Candles method Client can receive historical OHLCV candles of different resolutions
