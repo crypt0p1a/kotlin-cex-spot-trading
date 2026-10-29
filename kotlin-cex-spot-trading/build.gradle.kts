@@ -30,8 +30,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":kotlin-cex-spot-trading-rust"))
-                implementation(libs.korio.klock)
-                implementation(additionals.kotlinx.serialization.json)
+                api(libs.korio.klock)
+                api(additionals.kotlinx.serialization.json)
             }
         }
         commonTest {
