@@ -1,5 +1,8 @@
 package eu.codlab.cex.spot.trading
 
+import eu.codlab.cex.spot.trading.bridge.rustCall
+import eu.codlab.cex.spot.trading.bridge.toKotlin
+import eu.codlab.cex.spot.trading.bridge.toRust
 import eu.codlab.cex.spot.trading.calls.ApiConfiguration
 import eu.codlab.cex.spot.trading.calls.RestApiSecret
 import eu.codlab.cex.spot.trading.groups.account.PrivateAccountApi
@@ -52,7 +55,8 @@ class PrivateApi(
      *
      * https://trade.cex.io/docs/#rest-private-api-calls-current-fee
      */
-    override suspend fun getMyCurrentFee(pairs: Pairs) = account.getMyCurrentFee(pairs)
+    override suspend fun getMyCurrentFee(pairs: Pairs) =
+        rustCall { rust.getMyCurrentFee(pairs.pairs).toKotlin() }
 
     /**
      * Fee Strategy returns all fee options, which could be applied for Client, considering Client’s
