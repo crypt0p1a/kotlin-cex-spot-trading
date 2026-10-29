@@ -2,20 +2,15 @@ package eu.codlab.cex.spot.trading
 
 import eu.codlab.cex.spot.trading.bridge.rustCall
 import eu.codlab.cex.spot.trading.bridge.toKotlin
+import eu.codlab.cex.spot.trading.bridge.toRust
 import eu.codlab.cex.spot.trading.calls.IRestApi
-import eu.codlab.cex.spot.trading.groups.candles.Candle
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPair
 import eu.codlab.cex.spot.trading.groups.candles.CandlesFromPairs
-import eu.codlab.cex.spot.trading.groups.candles.GetCandles
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistory
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequest
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithDate
 import eu.codlab.cex.spot.trading.groups.history.trades.TradeHistoryRequestWithTrade
 import eu.codlab.cex.spot.trading.rust.ICommonApi as RustCommonApi
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 
 sealed class CommonApi : ICommonApi {
     protected abstract val call: IRestApi
@@ -41,17 +36,9 @@ sealed class CommonApi : ICommonApi {
      * https://trade.cex.io/docs/#rest-public-api-calls-candles
      * https://trade.cex.io/docs/#rest-private-api-calls-candles
      */
-    override suspend fun candles(
-        request: CandlesFromPairs
-    ) = candles(
-        request.toGetCandles(),
-        MapSerializer(
-            String.serializer(),
-            ListSerializer(
-                Candle.serializer()
-            )
-        )
-    )
+    override suspend fun candles(request: CandlesFromPairs) = rustCall {
+        rust.candles(request.toRust()).mapValues { candles -> candles.value.map { it.toKotlin() } }
+    }
 
     /**
      * By using Candles method Client can receive historical OHLCV candles of different resolutions
@@ -63,34 +50,9 @@ sealed class CommonApi : ICommonApi {
      * https://trade.cex.io/docs/#rest-public-api-calls-candles
      * https://trade.cex.io/docs/#rest-private-api-calls-candles
      */
-    override suspend fun candles(
-        request: CandlesFromPair
-    ) = candles(
-        request.toGetCandles(),
-        ListSerializer(
-            Candle.serializer()
-        )
-    )
-
-    /**
-     * By using Candles method Client can receive historical OHLCV candles of different resolutions
-     * and data types.
-     *
-     * Client can indicate additional timeframe and limit filters to make response more precise to
-     * Client’s requirements.
-     *
-     * https://trade.cex.io/docs/#rest-public-api-calls-candles
-     * https://trade.cex.io/docs/#rest-private-api-calls-candles
-     */
-    private suspend fun <O> candles(
-        request: GetCandles,
-        deserializer: KSerializer<O>
-    ) = call.call(
-        "get_candles",
-        request,
-        GetCandles.serializer(),
-        deserializer
-    )
+    override suspend fun candles(request: CandlesFromPair) = rustCall {
+        rust.candles(request.toRust()).map { it.toKotlin() }
+    }
 
     /**
      * This method allows Client to obtain historical data as to occurred trades upon requested
