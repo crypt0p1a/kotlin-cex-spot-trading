@@ -17,8 +17,10 @@ for each Kotlin target and generates the bindings in `eu.codlab.cex.spot.trading
 
 ## Targets
 
-`jvm` (the host library is bundled in the jar), `android`, `iosArm64`, `iosSimulatorArm64`,
-`macosArm64`. There is no `js`: the Rust code is called through JNA / cinterop.
+`jvm` (the host library is bundled in the jar), `android`, `iosX64`, `iosArm64`,
+`iosSimulatorArm64`, `macosArm64`, `mingwX64`, `linuxArm64`, `linuxX64`. There is no `js`: the
+Rust code is called through JNA / cinterop. There is no `macosX64` either: neither the UniFFI
+plugin nor its runtime support it.
 
 ## Usage
 
@@ -44,7 +46,10 @@ api.server_time().await?;
 
 Requires rustup with the targets of the platforms to build (`aarch64-linux-android`,
 `armv7-linux-androideabi`, `i686-linux-android`, `x86_64-linux-android`, `aarch64-apple-ios`,
-`aarch64-apple-ios-sim`) and the NDK `ndkVersion` of the gradle-tools catalog. The first build
+`aarch64-apple-ios-sim`, `x86_64-apple-ios`, `aarch64-unknown-linux-gnu`, `x86_64-unknown-linux-gnu`,
+`x86_64-pc-windows-gnu`), the C cross-compilers of the Linux and Windows targets
+(`aarch64-linux-gnu-gcc`, `x86_64-linux-gnu-gcc`, `x86_64-w64-mingw32-gcc`, used by `ring`) and
+the NDK `ndkVersion` of the gradle-tools catalog. The first build
 compiles the UniFFI generator (~6 to 10 minutes), kept in `build/uniffi/bindgen`.
 
 ```sh

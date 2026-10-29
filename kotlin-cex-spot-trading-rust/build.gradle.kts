@@ -44,9 +44,15 @@ kotlin {
         }
     }
 
+    iosX64()
     iosArm64()
     iosSimulatorArm64()
     macosArm64()
+
+    // no macosX64: neither the UniFFI plugin nor its runtime support it
+    mingwX64()
+    linuxArm64()
+    linuxX64()
 
     // the uniffi bindings hold unused expressions, flagged since Kotlin 2.4
     targets.configureEach {
